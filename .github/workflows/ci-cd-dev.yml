@@ -1,4 +1,4 @@
-name: CI/CD Pipeline Development
+name: CI/CD Pipeline Dev Environment
 
 on:
   push:
@@ -33,7 +33,6 @@ jobs:
         uses: docker/build-push-action@v6.7.0
         with:
           context: .
-          platforms: linux/amd64
           push: true
           tags: ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY }}:latest
           cache-from: type=registry,ref=${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_CACHE_REPOSITORY }}:cache

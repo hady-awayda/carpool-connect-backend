@@ -17,6 +17,13 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
 
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
       - name: Login to Amazon ECR
         run: |
           aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin ${{ secrets.ECR_REPOSITORY }}
@@ -34,9 +41,9 @@ jobs:
       - name: Deploy to EC2 and run container
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.EC2_HOST_DEV }}
-          username: ${{ secrets.EC2_USERNAME_DEV }}
-          key: ${{ secrets.EC2_SSH_PRIVATE_KEY_DEV }}
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
           script: |
             cd /home/ubuntu/carpool-connect-backend
             sudo git switch dev

@@ -34,6 +34,7 @@ jobs:
       #     cache-from: type=registry,ref=${{ secrets.ECR_REPOSITORY }}:cache
       #     cache-to: type=registry,ref=${{ secrets.ECR_REPOSITORY }}:cache,mode=max
 
+      Step 5: Deploy by pulling the latest image from ECR and running the container
       - name: Deploy to EC2 and run container
         uses: appleboy/ssh-action@master
         with:

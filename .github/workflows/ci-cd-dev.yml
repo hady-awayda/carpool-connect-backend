@@ -1,4 +1,4 @@
-name: CI/CD Pipeline Devevelopment
+name: CI/CD Pipeline Development
 
 on:
   push:
@@ -35,7 +35,7 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           context: .
-          builder: default 
+          builder: default
           platforms: linux/amd64,linux/arm64
           push: true
           tags: ${{ secrets.ECR_REPOSITORY }}:latest

@@ -16,7 +16,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
+        uses: docker/setup-buildx-action@v3
         with:
           driver: docker-container
 
@@ -35,7 +35,7 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           context: .
-          builder: default
+          builder: default 
           platforms: linux/amd64,linux/arm64
           push: true
           tags: ${{ secrets.ECR_REPOSITORY }}:latest

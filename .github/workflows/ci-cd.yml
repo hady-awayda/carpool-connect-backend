@@ -14,27 +14,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      # Step 2: Set up Docker Buildx
-      # - name: Set up Docker Buildx
-      #   uses: docker/setup-buildx-action@v1
-
-      # # Step 3: Log in to Amazon ECR
-      # - name: Login to Amazon ECR
-      #   run: |
-      #     aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin ${{ secrets.ECR_REPOSITORY }}
-
-      # # Step 4: Build and push the Docker image using Buildx
-      # - name: Build and push Docker image to ECR
-      #   uses: docker/build-push-action@v2
-      #   with:
-      #     context: .
-      #     platforms: linux/amd64,linux/arm64
-      #     push: true
-      #     tags: ${{ secrets.ECR_REPOSITORY }}:latest
-      #     cache-from: type=registry,ref=${{ secrets.ECR_REPOSITORY }}:cache
-      #     cache-to: type=registry,ref=${{ secrets.ECR_REPOSITORY }}:cache,mode=max
-
-      Step 5: Deploy by pulling the latest image from ECR and running the container
       - name: Deploy to EC2 and run container
         uses: appleboy/ssh-action@master
         with:
@@ -42,20 +21,5 @@ jobs:
           username: ${{ secrets.EC2_USERNAME_DEV }}
           key: ${{ secrets.EC2_SSH_PRIVATE_KEY_DEV }}
           script: |
-              cd /home/ubuntu/carpool-connect-backend
-              sudo git pull
-              
-      #       # Log in to ECR on the EC2 instance
-      #       aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin ${{ secrets.ECR_REPOSITORY }}
-
-      #       # Stop and remove any running container (if applicable)
-      #       if [ $(docker ps -q --filter "name=my-container") ]; then
-      #         docker stop my-container
-      #         docker rm my-container
-      #       fi
-
-      #       # Pull the latest image from ECR
-      #       docker pull ${{ secrets.ECR_REPOSITORY }}:latest
-
-      #       # Run the container (adjust ports, volume mounts, and environment variables as needed)
-      #       docker run -d --name my-container -p 80:80 ${{ secrets.ECR_REPOSITORY }}:latest
+            cd /home/ubuntu/carpool-connect-backend
+            sudo git pull

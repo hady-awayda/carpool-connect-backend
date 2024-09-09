@@ -49,18 +49,10 @@ jobs:
             cd /home/ubuntu/carpool-connect-backend
             sudo git switch dev
             sudo git pull
-
-      #       # Log in to ECR on the EC2 instance
-      #       aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin ${{ secrets.ECR_REPOSITORY }}
-
-      #       # Stop and remove any running container (if applicable)
-      #       if [ $(docker ps -q --filter "name=my-container") ]; then
-      #         docker stop my-container
-      #         docker rm my-container
-      #       fi
-
-      #       # Pull the latest image from ECR
-      #       docker pull ${{ secrets.ECR_REPOSITORY }}:latest
-
-      #       # Run the container (adjust ports, volume mounts, and environment variables as needed)
-      #       docker run -d --name my-container -p 80:80 ${{ secrets.ECR_REPOSITORY }}:latest
+            aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin ${{ steps.login-ecr.outputs.registry }}
+            if [ $(docker ps -q --filter "name=backend-dev") ]; then
+              docker stop backend-dev
+              docker rm backend-dev
+            fi
+            docker pull ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY }}:latest
+            docker run -d --name backend-dev -p 80:80 ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY }}:latest

@@ -1,10 +1,10 @@
-name: CI/CD Pipeline
+name: CI/CD Pipeline Dev Environment
 
 on:
   push:
-    branches: [main]
+    branches: [dev]
   pull_request:
-    branches: [main]
+    branches: [dev]
 
 jobs:
   build-and-deploy:
@@ -37,12 +37,12 @@ jobs:
       - name: Deploy to EC2 and run container
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.EC2_HOST_PROD }}
-          username: ${{ secrets.EC2_USERNAME_PROD }}
-          key: ${{ secrets.EC2_SSH_PRIVATE_KEY_PROD }}
+          host: ${{ secrets.EC2_HOST_DEV }}
+          username: ${{ secrets.EC2_USERNAME_DEV }}
+          key: ${{ secrets.EC2_SSH_PRIVATE_KEY_DEV }}
           script: |
             cd /home/ubuntu/carpool-connect-backend
-            sudo git switch main
+            sudo git switch dev
             sudo git pull
             npm i
 

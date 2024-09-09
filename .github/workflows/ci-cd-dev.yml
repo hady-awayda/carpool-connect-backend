@@ -49,10 +49,8 @@ jobs:
             cd /home/ubuntu/carpool-connect-backend
             sudo git switch dev
             sudo git pull
-            aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin ${{ steps.login-ecr.outputs.registry }}
-            if [ $(docker ps -q --filter "name=backend-dev") ]; then
-              docker stop backend-dev
-              docker rm backend-dev
-            fi
-            docker pull ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY }}:latest
-            docker run -d --name backend-dev -p 80:80 ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY }}:latest
+            aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | sudo docker login --username AWS --password-stdin ${{ steps.login-ecr.outputs.registry }}
+            sudo docker stop backend-dev || true
+            sudo docker rm backend-dev || true
+            sudo docker pull ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY }}:latest
+            sudo docker run -d --name backend-dev -p 80:80 ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY }}:latest

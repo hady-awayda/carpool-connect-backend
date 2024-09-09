@@ -61,3 +61,4 @@ jobs:
             sudo docker rm backend-dev || true
             sudo docker pull ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY }}:latest
             sudo docker run -d --name backend-dev -p 80:80 ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY }}:latest
+            sudo docker image prune -f

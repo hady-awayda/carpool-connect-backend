@@ -32,6 +32,7 @@ jobs:
       #     cache-to: type=registry,ref=${{ secrets.ECR_REPOSITORY }}:cache,mode=max
 
       - name: Deploy to EC2 and run container
+        environment: Production
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.EC2_HOST }}

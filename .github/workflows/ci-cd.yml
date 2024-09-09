@@ -2,9 +2,9 @@ name: CI/CD Pipeline
 
 on:
   push:
-    branches: [main]
+    branches: [dev]
   pull_request:
-    branches: [main]
+    branches: [dev]
 
 jobs:
   build-and-deploy:
@@ -34,7 +34,6 @@ jobs:
       #     cache-from: type=registry,ref=${{ secrets.ECR_REPOSITORY }}:cache
       #     cache-to: type=registry,ref=${{ secrets.ECR_REPOSITORY }}:cache,mode=max
 
-      Step 5: Deploy by pulling the latest image from ECR and running the container
       - name: Deploy to EC2 and run container
         uses: appleboy/ssh-action@master
         with:
@@ -42,9 +41,9 @@ jobs:
           username: ${{ secrets.EC2_USERNAME_DEV }}
           key: ${{ secrets.EC2_SSH_PRIVATE_KEY_DEV }}
           script: |
-              cd /home/ubuntu/carpool-connect-backend
-              sudo git pull
-              
+            cd /home/ubuntu/carpool-connect-backend
+            sudo git pull
+
       #       # Log in to ECR on the EC2 instance
       #       aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin ${{ secrets.ECR_REPOSITORY }}
 

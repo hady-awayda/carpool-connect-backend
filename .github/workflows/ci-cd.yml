@@ -44,7 +44,6 @@ jobs:
             cd /home/ubuntu/carpool-connect-backend
             sudo git switch main
             sudo git pull
-            npm i
 
       #       # Log in to ECR on the EC2 instance
       #       aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin ${{ secrets.ECR_REPOSITORY }}

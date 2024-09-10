@@ -13,47 +13,54 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4.1.7
 
-      # - name: Set up Docker Buildx
-      #   uses: docker/setup-buildx-action@v1
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4.0.2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
 
-      # - name: Login to Amazon ECR
-      #   run: |
-      #     aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin ${{ secrets.ECR_REPOSITORY }}
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2.0.1
 
-      # - name: Build and push Docker image to ECR
-      #   uses: docker/build-push-action@v2
-      #   with:
-      #     context: .
-      #     platforms: linux/amd64,linux/arm64
-      #     push: true
-      #     tags: ${{ secrets.ECR_REPOSITORY }}:latest
-      #     cache-from: type=registry,ref=${{ secrets.ECR_REPOSITORY }}:cache
-      #     cache-to: type=registry,ref=${{ secrets.ECR_REPOSITORY }}:cache,mode=max
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3.6.1
+
+      - name: Build and push Docker image to ECR
+        uses: docker/build-push-action@v6.7.0
+        with:
+          context: .
+          push: true
+          platforms: linux/amd64
+          tags: ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY }}:latest
+          cache-from: type=registry,ref=${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_CACHE_REPOSITORY }}:cache
+          cache-to: type=registry,ref=${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_CACHE_REPOSITORY  }}:cache,mode=max,image-manifest=true,oci-mediatypes=true
+          target: final
 
       - name: Deploy to EC2 and run container
-        uses: appleboy/ssh-action@master
+        uses: appleboy/ssh-action@v1.0.3
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: ${{ secrets.AWS_REGION }}
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
+          envs: AWS_ACCESS_KEY_ID,AWS_SECRET_ACCESS_KEY,AWS_REGION
           script: |
             cd /home/ubuntu/carpool-connect-backend
             sudo git switch main
             sudo git pull
-
-      #       # Log in to ECR on the EC2 instance
-      #       aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin ${{ secrets.ECR_REPOSITORY }}
-
-      #       # Stop and remove any running container (if applicable)
-      #       if [ $(docker ps -q --filter "name=my-container") ]; then
-      #         docker stop my-container
-      #         docker rm my-container
-      #       fi
-
-      #       # Pull the latest image from ECR
-      #       docker pull ${{ secrets.ECR_REPOSITORY }}:latest
-
-      #       # Run the container (adjust ports, volume mounts, and environment variables as needed)
-      #       docker run -d --name my-container -p 80:80 ${{ secrets.ECR_REPOSITORY }}:latest
+            aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
+            aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
+            aws configure set default.region $AWS_REGION
+            aws ecr get-login-password --region $AWS_REGION | sudo docker login --username AWS --password-stdin ${{ steps.login-ecr.outputs.registry }}
+            sudo docker stop backend-dev || true
+            sudo docker rm backend-dev || true
+            sudo docker pull ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY }}:latest
+            sudo docker run -d --name backend-dev -p 80:80 ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY }}:latest
+            sudo docker image prune -a -f

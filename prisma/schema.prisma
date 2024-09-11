@@ -19,6 +19,14 @@ enum RideUserTypeEnum {
   partnership
 }
 
+enum UserRelationshipsStatusEnum {
+  requested
+  approved
+  declined
+  active
+  ended
+}
+
 // Models
 model User {
   id             Int      @id @default(autoincrement())
@@ -55,4 +63,19 @@ model RideSchedule {
 
   // Foreign Keys
   user            User     @relation(fields: [userId], references: [id])
+}
+
+model UserMatch {
+  id             Int      @id @default(autoincrement())
+  userId1        Int
+  userId2        Int
+  status         UserRelationshipsStatusEnum @default(requested)
+  requestedBy    Int
+  responseBy     Int?
+  requestedAt    DateTime @default(now())
+  approvedAt     DateTime?
+  updatedAt      DateTime @updatedAt
+
+  user1          User @relation("User1", fields: [userId1], references: [id])
+  user2          User @relation("User2", fields: [userId2], references: [id])
 }

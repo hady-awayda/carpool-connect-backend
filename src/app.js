@@ -1,9 +1,10 @@
 import dotenv from "dotenv";
 import express from "express";
-import userRoutes from "./routes/userRoutes.js";
-import rideScheduleRoutes from "./routes/rideScheduleRoutes.js";
-import authRoutes from "./routes/authRoutes.js";
 import setupSwaggerUI from "../config/swagger.js";
+import authRoutes from "./routes/authRoutes.js";
+import rideScheduleRoutes from "./routes/rideScheduleRoutes.js";
+import userMatchRoutes from "./routes/userMatchRoutes.js";
+import userRoutes from "./routes/userRoutes.js";
 
 dotenv.config();
 
@@ -15,6 +16,7 @@ app.use(express.json());
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/ride-schedules", rideScheduleRoutes);
+app.use("/api/user-matches", userMatchRoutes);
 
 setupSwaggerUI(app);
 

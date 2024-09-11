@@ -1,4 +1,4 @@
-import RideAgreementService from '../services/rideAgreementService.js';
+import RideAgreementService from "../services/rideAgreementService.js";
 
 const RideAgreementController = {
   createRideAgreement: async (req, res) => {
@@ -19,18 +19,28 @@ const RideAgreementController = {
     const { id } = req.params;
     const { data, userId } = req.body;
     try {
-      const updatedAgreement = await RideAgreementService.updateRideAgreement(parseInt(id), data, userId);
+      const updatedAgreement = await RideAgreementService.updateRideAgreement(
+        parseInt(id),
+        data,
+        userId
+      );
       res.status(200).json(updatedAgreement);
     } catch (error) {
       res.status(400).json({ message: error.message });
     }
   },
 
-  deleteRideAgreement: async (req, res) => {
+  // Soft delete ride agreement
+  softDeleteRideAgreement: async (req, res) => {
     const { id, userId } = req.params;
     try {
-      await RideAgreementService.deleteRideAgreement(parseInt(id), userId);
-      res.status(200).json({ message: 'Ride Agreement deleted successfully' });
+      await RideAgreementService.softDeleteRideAgreement(
+        parseInt(id),
+        parseInt(userId)
+      );
+      res
+        .status(200)
+        .json({ message: "Ride Agreement soft deleted successfully" });
     } catch (error) {
       res.status(400).json({ message: error.message });
     }

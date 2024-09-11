@@ -147,7 +147,8 @@ model RideAgreement {
   createdAt                  DateTime @default(now())
   updatedAt                  DateTime @updatedAt
   deletedAt                  DateTime?
-
+  updatedBy                  Int?
+  deletedBy                  Int?
 
   matchedRide                MatchedRide @relation(fields: [matchedRideId], references: [id])
   proposedByUser             User @relation(fields: [proposedBy], references: [id])

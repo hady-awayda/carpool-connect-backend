@@ -6,8 +6,8 @@ const router = express.Router();
 router.post("/create", RideAgreementController.createRideAgreement);
 router.put("/update/:id", RideAgreementController.updateRideAgreement);
 router.delete(
-  "/delete/:id/:userId",
-  RideAgreementController.deleteRideAgreement
+  "/soft-delete/:id/:userId",
+  RideAgreementController.softDeleteRideAgreement
 );
 
 export default router;

@@ -14,15 +14,19 @@ const RideAgreementRepository = {
     });
   },
 
-  deleteRideAgreement: async (id) => {
-    return prisma.rideAgreement.delete({
+  // Soft delete ride agreement
+  softDeleteRideAgreement: async (id) => {
+    return prisma.rideAgreement.update({
       where: { id },
+      data: {
+        deletedAt: new Date(), // Mark as deleted
+      },
     });
   },
 
   getRideAgreementById: async (id) => {
     return prisma.rideAgreement.findUnique({
-      where: { id },
+      where: { id, deletedAt: null }, // Fetch only non-deleted agreements
     });
   },
 };

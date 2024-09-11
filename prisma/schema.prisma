@@ -42,114 +42,123 @@ enum RideAgreementsStatusEnum {
 
 // Models
 model User {
-  id             Int      @id @default(autoincrement())
-  name           String   @db.VarChar(255)
-  email          String   @unique
-  password       String   @db.VarChar(255)
-  role           UserRolesEnum @default(user)
-  phoneNumber    String?  @db.VarChar(20)
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
-  deletedAt      DateTime?
-  createdBy      Int?
-  updatedBy      Int?
-  deletedBy      Int?
+  id          Int           @id @default(autoincrement())
+  name        String        @db.VarChar(255)
+  email       String        @unique
+  password    String        @db.VarChar(255)
+  role        UserRolesEnum @default(user)
+  phoneNumber String?       @db.VarChar(20)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  deletedAt   DateTime?
+  createdBy   Int?
+  updatedBy   Int?
+  deletedBy   Int?
 
   // Relationships
-  rideSchedules  RideSchedule[]
+  rideSchedules RideSchedule[]
+
+  // Inverse relations for UserMatch
+  user1Matches UserMatch[] @relation("User1")
+  user2Matches UserMatch[] @relation("User2")
+
+  // Inverse relation for RideAgreement
+  proposedAgreements RideAgreement[] @relation("ProposedByUser")
 }
 
 model RideSchedule {
-  id              Int      @id @default(autoincrement())
-  userId          Int
-  rideUserType    RideUserTypeEnum @default(rider)
-  departureLat    Float
-  departureLng    Float
-  destinationLat  Float
-  destinationLng  Float
+  id                Int              @id @default(autoincrement())
+  userId            Int
+  rideUserType      RideUserTypeEnum @default(rider)
+  departureLat      Float
+  departureLng      Float
+  destinationLat    Float
+  destinationLng    Float
   ridePreferencesId Int
-  departureTime   DateTime
-  arrivalTime     DateTime
-  isActive        Boolean  @default(true)
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
-  deletedAt       DateTime?
+  departureTime     DateTime
+  arrivalTime       DateTime
+  isActive          Boolean          @default(true)
+  createdAt         DateTime         @default(now())
+  updatedAt         DateTime         @updatedAt
+  deletedAt         DateTime?
 
   // Foreign Keys
-  user            User     @relation(fields: [userId], references: [id])
+  user            User            @relation(fields: [userId], references: [id])
   ridePreferences RidePreferences @relation(fields: [ridePreferencesId], references: [id])
+
+  // Inverse relations for MatchedRide
+  matchedRide1 MatchedRide[] @relation("ride1")
+  matchedRide2 MatchedRide[] @relation("ride2")
 }
 
 model RidePreferences {
-  id                    Int      @id @default(autoincrement())
-  maxProximityKm        Float    @default(5.00)
-  maxTimeDeviationMin   Int      @default(10)
+  id                     Int       @id @default(autoincrement())
+  maxProximityKm         Float     @default(5.00)
+  maxTimeDeviationMin    Int       @default(10)
   preferredRideDeparture DateTime?
-  preferredRideArrival  DateTime?
-  createdAt             DateTime @default(now())
-  updatedAt             DateTime @updatedAt
-  deletedAt             DateTime?
+  preferredRideArrival   DateTime?
+  createdAt              DateTime  @default(now())
+  updatedAt              DateTime  @updatedAt
+  deletedAt              DateTime?
 
   // Foreign Key to RideSchedule
   RideSchedule RideSchedule[]
-
-  @@unique([id], name: "unique_user_preferences")
 }
 
 model UserMatch {
-  id             Int      @id @default(autoincrement())
-  userId1        Int
-  userId2        Int
-  status         UserRelationshipsStatusEnum @default(requested)
-  requestedBy    Int
-  responseBy     Int?
-  requestedAt    DateTime @default(now())
-  approvedAt     DateTime?
-  updatedAt      DateTime @updatedAt
+  id          Int                         @id @default(autoincrement())
+  userId1     Int
+  userId2     Int
+  status      UserRelationshipsStatusEnum @default(requested)
+  requestedBy Int
+  responseBy  Int?
+  requestedAt DateTime                    @default(now())
+  approvedAt  DateTime?
+  updatedAt   DateTime                    @updatedAt
 
-  user1          User @relation("User1", fields: [userId1], references: [id])
-  user2          User @relation("User2", fields: [userId2], references: [id])
+  user1 User @relation("User1", fields: [userId1], references: [id])
+  user2 User @relation("User2", fields: [userId2], references: [id])
 }
 
 model MatchedRide {
-  id                         Int      @id @default(autoincrement())
-  rideScheduleId1            Int
-  rideScheduleId2            Int
-  routeDeviationTimeMin      Int      @default(0)
-  routeDeviationDistanceKm   Float    @default(0.00)
-  agreedDepartureTime        DateTime
-  agreedArrivalTime          DateTime
-  carDetails                 String?
-  user1AgreementStatus       AgreementStatus @default(pending)
-  user2AgreementStatus       AgreementStatus @default(pending)
-  createdAt                  DateTime @default(now())
-  updatedAt                  DateTime @updatedAt
-  deletedAt                  DateTime?
-  createdBy                  Int?
-  updatedBy                  Int?
-  deletedBy                  Int?
+  id                       Int             @id @default(autoincrement())
+  rideScheduleId1          Int
+  rideScheduleId2          Int
+  routeDeviationTimeMin    Int             @default(0)
+  routeDeviationDistanceKm Float           @default(0.00)
+  agreedDepartureTime      DateTime
+  agreedArrivalTime        DateTime
+  carDetails               String?
+  user1AgreementStatus     AgreementStatus @default(pending)
+  user2AgreementStatus     AgreementStatus @default(pending)
+  createdAt                DateTime        @default(now())
+  updatedAt                DateTime        @updatedAt
+  deletedAt                DateTime?
+  createdBy                Int?
+  updatedBy                Int?
+  deletedBy                Int?
 
-  rideSchedule1              RideSchedule @relation("ride1", fields: [rideScheduleId1], references: [id])
-  rideSchedule2              RideSchedule @relation("ride2", fields: [rideScheduleId2], references: [id])
+  rideSchedule1 RideSchedule @relation("ride1", fields: [rideScheduleId1], references: [id])
+  rideSchedule2 RideSchedule @relation("ride2", fields: [rideScheduleId2], references: [id])
 
-  rideAgreements             RideAgreement[]
+  rideAgreements RideAgreement[]
 }
 
 model RideAgreement {
-  id                         Int      @id @default(autoincrement())
-  matchedRideId              Int
-  proposedBy                 Int
-  proposedRouteDeviationTimeMin Int     @default(0)
-  proposedRouteDeviationDistanceKm Float @default(0.00)
-  proposedDepartureTime      DateTime
-  proposedArrivalTime        DateTime
-  status                     RideAgreementsStatusEnum @default(pending)
-  createdAt                  DateTime @default(now())
-  updatedAt                  DateTime @updatedAt
-  deletedAt                  DateTime?
-  updatedBy                  Int?
-  deletedBy                  Int?
+  id                               Int                      @id @default(autoincrement())
+  matchedRideId                    Int
+  proposedBy                       Int
+  proposedRouteDeviationTimeMin    Int                      @default(0)
+  proposedRouteDeviationDistanceKm Float                    @default(0.00)
+  proposedDepartureTime            DateTime
+  proposedArrivalTime              DateTime
+  status                           RideAgreementsStatusEnum @default(pending)
+  createdAt                        DateTime                 @default(now())
+  updatedAt                        DateTime                 @updatedAt
+  deletedAt                        DateTime?
+  updatedBy                        Int?
+  deletedBy                        Int?
 
-  matchedRide                MatchedRide @relation(fields: [matchedRideId], references: [id])
-  proposedByUser             User @relation(fields: [proposedBy], references: [id])
+  matchedRide    MatchedRide @relation(fields: [matchedRideId], references: [id])
+  proposedByUser User        @relation("ProposedByUser", fields: [proposedBy], references: [id])
 }

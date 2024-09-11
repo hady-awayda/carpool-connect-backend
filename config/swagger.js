@@ -25,7 +25,7 @@ const swaggerSpec = swaggerJSDoc(options);
 
 const setupSwaggerUI = (app) => {
   app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-  console.log("Swagger docs available at /api-docs");
+  console.log("Swagger docs available at /docs");
 };
 
 export default setupSwaggerUI;

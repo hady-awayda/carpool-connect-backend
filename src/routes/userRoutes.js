@@ -63,7 +63,6 @@ router.get("/all", UserController.getUsers);
  *         description: User not found
  */
 router.get("/:id", UserController.getUser);
-router.post("/create", UserController.createUser);
 router.put("/:id", UserController.updateUser);
 router.delete("/:id", UserController.deleteUser);
 

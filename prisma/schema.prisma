@@ -7,9 +7,52 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// Enums
+enum UserTypesEnum {
+  user
+  admin
+}
+
+enum RouteUserType {
+  rider
+  passenger
+  partnership
+}
+
+// Models
 model User {
-  id        Int      @id @default(autoincrement())
-  name      String
-  email     String   @unique
-  createdAt DateTime @default(now())
+  id             Int      @id @default(autoincrement())
+  name           String   @db.VarChar(255)
+  email          String   @unique
+  phoneNumber    String?  @db.VarChar(20)
+  password       String   @db.VarChar(255)
+  userType       UserTypesEnum @default(user)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  deletedAt      DateTime?
+  createdBy      Int?
+  updatedBy      Int?
+  deletedBy      Int?
+
+  // Relationships
+  rideSchedules  RideSchedule[]
+}
+
+model RideSchedule {
+  id              Int      @id @default(autoincrement())
+  userId          Int
+  rideUserType    RouteUserType @default(rider)
+  departureLat    Float
+  departureLng    Float
+  destinationLat  Float
+  destinationLng  Float
+  departureTime   DateTime
+  arrivalTime     DateTime
+  isActive        Boolean  @default(true)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  deletedAt       DateTime?
+
+  // Foreign Keys
+  user            User     @relation(fields: [userId], references: [id])
 }

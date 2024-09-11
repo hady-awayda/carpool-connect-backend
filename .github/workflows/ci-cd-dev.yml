@@ -63,5 +63,5 @@ jobs:
             sudo docker stop backend-dev || true
             sudo docker rm backend-dev || true
             sudo docker pull ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY }}:latest
-            sudo docker run -d --name backend-dev -p 80:80 -e JWT_SECRET=${{ secrets.JWT_SECRET }} ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY }}:latest
+            sudo docker run -d --name backend-dev -p ${{ secrets.PORT }}:${{ secrets.PORT }} -e JWT_SECRET=${{ secrets.JWT_SECRET }} -e PORT=${{ secrets.PORT }} -e DATABASE_URL=${{ secrets.DATABASE_URL }} ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY }}:latest
             sudo docker image prune -a -f

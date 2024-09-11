@@ -1,20 +1,62 @@
 import RideScheduleRepository from "../repositories/rideScheduleRepository.js";
+import RidePreferencesRepository from "../repositories/ridePreferencesRepository.js";
 
 const RideScheduleService = {
-  getRideSchedules: async () => {
-    return RideScheduleRepository.getAllRideSchedules();
+  createRideSchedule: async (userId, rideScheduleData, preferencesData) => {
+    // Create ride preferences first
+    const ridePreferences =
+      await RidePreferencesRepository.createRidePreferences({
+        ...preferencesData,
+      });
+
+    // Now create the ride schedule with reference to the preferences
+    return RideScheduleRepository.createRideSchedule({
+      ...rideScheduleData,
+      userId,
+      ridePreferencesId: ridePreferences.id,
+    });
   },
 
-  createRideSchedule: async (data) => {
-    return RideScheduleRepository.createRideSchedule(data);
+  getRideSchedulesByUserId: async (userId) => {
+    // Get all ride schedules for a user
+    const rideSchedules = await RideScheduleRepository.getRideSchedulesByUserId(
+      userId
+    );
+
+    // Retrieve ride preferences for each ride schedule and include them
+    const rideSchedulesWithPreferences = await Promise.all(
+      rideSchedules.map(async (rideSchedule) => {
+        const ridePreferences =
+          await RidePreferencesRepository.getRidePreferencesByRideScheduleId(
+            rideSchedule.ridePreferencesId
+          );
+        return { ...rideSchedule, ridePreferences };
+      })
+    );
+
+    return rideSchedulesWithPreferences;
   },
 
-  updateRideSchedule: async (id, data) => {
-    return RideScheduleRepository.updateRideSchedule(id, data);
+  updateRideSchedule: async (id, rideScheduleData) => {
+    return RideScheduleRepository.updateRideSchedule(id, rideScheduleData);
   },
 
-  deleteRideSchedule: async (id) => {
-    return RideScheduleRepository.deleteRideSchedule(id);
+  updateRidePreferences: async (id, preferencesData) => {
+    return RidePreferencesRepository.updateRidePreferences(id, preferencesData);
+  },
+
+  // Soft delete both the ride schedule and its associated preferences
+  softDeleteRideScheduleAndPreferences: async (
+    rideScheduleId,
+    ridePreferencesId
+  ) => {
+    // Soft delete the ride preferences first
+    await RidePreferencesRepository.softDeleteRidePreferences(
+      ridePreferencesId
+    );
+
+    // Then soft delete the ride schedule
+    return RideScheduleRepository.softDeleteRideSchedule(rideScheduleId);
   },
 };
 

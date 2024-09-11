@@ -21,8 +21,8 @@ const MatchedRideService = {
     return MatchedRideRepository.createMatchedRide(data);
   },
 
-  getMatchedRideById: async (id) => {
-    return MatchedRideRepository.getMatchedRideById(id);
+  getMatchedRidesByUserId: async (userId) => {
+    return MatchedRideRepository.getMatchedRidesByUserId(userId);
   },
 
   updateMatchedRideStatus: async (id, user1Status, user2Status) => {
@@ -31,6 +31,11 @@ const MatchedRideService = {
       user1Status,
       user2Status
     );
+  },
+
+  // Soft delete a matched ride
+  softDeleteMatchedRide: async (id) => {
+    return MatchedRideRepository.softDeleteMatchedRide(id);
   },
 };
 

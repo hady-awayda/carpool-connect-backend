@@ -124,6 +124,10 @@ model MatchedRide {
   user2AgreementStatus       AgreementStatus @default(pending)
   createdAt                  DateTime @default(now())
   updatedAt                  DateTime @updatedAt
+  deletedAt                  DateTime?
+  createdBy                  Int?
+  updatedBy                  Int?
+  deletedBy                  Int?
 
   rideSchedule1              RideSchedule @relation("ride1", fields: [rideScheduleId1], references: [id])
   rideSchedule2              RideSchedule @relation("ride2", fields: [rideScheduleId2], references: [id])
@@ -131,7 +135,6 @@ model MatchedRide {
   rideAgreements             RideAgreement[]
 }
 
-// Ride Agreements
 model RideAgreement {
   id                         Int      @id @default(autoincrement())
   matchedRideId              Int
@@ -143,6 +146,8 @@ model RideAgreement {
   status                     RideAgreementsStatusEnum @default(pending)
   createdAt                  DateTime @default(now())
   updatedAt                  DateTime @updatedAt
+  deletedAt                  DateTime?
+
 
   matchedRide                MatchedRide @relation(fields: [matchedRideId], references: [id])
   proposedByUser             User @relation(fields: [proposedBy], references: [id])

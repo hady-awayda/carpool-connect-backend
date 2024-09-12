@@ -2,12 +2,13 @@ import AuthService from "../services/authService.js";
 
 const AuthController = {
   register: async (req, res) => {
-    const { name, email, password } = req.body;
+    const { name, email, password, phoneNumber } = req.body;
     try {
       const { token, user } = await AuthService.registerUser(
         name,
         email,
-        password
+        password,
+        phoneNumber
       );
       res.status(201).json({ token, user });
     } catch (err) {

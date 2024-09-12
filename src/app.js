@@ -20,6 +20,10 @@ app.use("/api/user-matches", userMatchRoutes);
 
 setupSwaggerUI(app);
 
-app.listen(PORT, () => {
+app.get("/health", (req, res) => {
+  res.status(200).send("OK");
+});
+
+app.listen(PORT, "0.0.0.0", () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });

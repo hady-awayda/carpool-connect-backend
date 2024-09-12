@@ -40,28 +40,35 @@ jobs:
           cache-to: type=registry,ref=${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_CACHE_REPOSITORY  }}:cache,mode=max,image-manifest=true,oci-mediatypes=true
           target: final
 
-      - name: Deploy to EC2 and run container
-        uses: appleboy/ssh-action@v1.0.3
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: ${{ secrets.AWS_REGION }}
-          JWT_SECRET: ${{ secrets.JWT_SECRET }}
-        with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USERNAME }}
-          key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
-          envs: AWS_ACCESS_KEY_ID,AWS_SECRET_ACCESS_KEY,AWS_REGION,JWT_SECRET
-          script: |
-            cd /home/ubuntu/carpool-connect-backend
-            sudo git switch dev
-            sudo git pull
-            aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
-            aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
-            aws configure set default.region $AWS_REGION
-            aws ecr get-login-password --region $AWS_REGION | sudo docker login --username AWS --password-stdin ${{ steps.login-ecr.outputs.registry }}
-            sudo docker stop backend-dev || true
-            sudo docker rm backend-dev || true
-            sudo docker pull ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY }}:latest
-            sudo docker run -d --name backend-dev -p ${{ secrets.PORT }}:${{ secrets.PORT }} -e JWT_SECRET=${{ secrets.JWT_SECRET }} -e PORT=${{ secrets.PORT }} -e DATABASE_URL=${{ secrets.DATABASE_URL }} ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY }}:latest
-            sudo docker image prune -a -f
+      - name: Deploy to Fargate
+        run: |
+          aws ecs update-service \
+            --cluster carpool-prod \
+            --service backend-container \
+            --force-new-deployment
+
+      # - name: Deploy to EC2 and run container
+      #   uses: appleboy/ssh-action@v1.0.3
+      #   env:
+      #     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      #     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      #     AWS_REGION: ${{ secrets.AWS_REGION }}
+      #     JWT_SECRET: ${{ secrets.JWT_SECRET }}
+      #   with:
+      #     host: ${{ secrets.EC2_HOST }}
+      #     username: ${{ secrets.EC2_USERNAME }}
+      #     key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
+      #     envs: AWS_ACCESS_KEY_ID,AWS_SECRET_ACCESS_KEY,AWS_REGION,JWT_SECRET
+      #     script: |
+      #       cd /home/ubuntu/carpool-connect-backend
+      #       sudo git switch dev
+      #       sudo git pull
+      #       aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
+      #       aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
+      #       aws configure set default.region $AWS_REGION
+      #       aws ecr get-login-password --region $AWS_REGION | sudo docker login --username AWS --password-stdin ${{ steps.login-ecr.outputs.registry }}
+      #       sudo docker stop backend-dev || true
+      #       sudo docker rm backend-dev || true
+      #       sudo docker pull ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY }}:latest
+      #       sudo docker run -d --name backend-dev -p ${{ secrets.PORT }}:${{ secrets.PORT }} -e JWT_SECRET=${{ secrets.JWT_SECRET }} -e PORT=${{ secrets.PORT }} -e DATABASE_URL=${{ secrets.DATABASE_URL }} ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY }}:latest
+      #       sudo docker image prune -a -f

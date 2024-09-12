@@ -21,7 +21,6 @@ app.use("/api/user-matches", userMatchRoutes);
 setupSwaggerUI(app);
 
 app.get("/health", (req, res) => {
-  console.log("Health check ok! :)");
   res.status(200).send("OK");
 });
 

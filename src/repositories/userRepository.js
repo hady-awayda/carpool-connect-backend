@@ -1,25 +1,59 @@
 import prisma from "../../config/prisma_client.js";
 
-const UserRepository = {
+const UserService = {
   getAllUsers: async () => {
-    return prisma.user.findMany();
+    return await prisma.user.findMany({
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        role: true,
+        phoneNumber: true,
+        createdAt: true,
+        updatedAt: true,
+        password: false,
+      },
+    });
   },
 
   getUserById: async (id) => {
-    return prisma.user.findUnique({ where: { id } });
-  },
-
-  createUser: async (data) => {
-    return prisma.user.create({ data });
+    return await prisma.user.findUnique({
+      where: { id: parseInt(id) },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        role: true,
+        phoneNumber: true,
+        createdAt: true,
+        updatedAt: true,
+        password: false,
+      },
+    });
   },
 
   updateUser: async (id, data) => {
-    return prisma.user.update({ where: { id }, data });
+    return await prisma.user.update({
+      where: { id: parseInt(id) },
+      data: { ...data },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        role: true,
+        phoneNumber: true,
+        createdAt: true,
+        updatedAt: true,
+        password: false,
+      },
+    });
   },
 
   deleteUser: async (id) => {
-    return prisma.user.delete({ where: { id } });
+    return await prisma.user.delete({
+      where: { id: parseInt(id) },
+    });
   },
 };
 
-export default UserRepository;
+export default UserService;

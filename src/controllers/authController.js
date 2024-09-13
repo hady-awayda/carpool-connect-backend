@@ -12,6 +12,7 @@ const AuthController = {
         password,
         phoneNumber
       );
+      user.password = undefined;
       res.status(201).json({ token, user });
     } catch (err) {
       res.status(400).json({ message: err.message });
@@ -22,6 +23,7 @@ const AuthController = {
     const { email, password } = req.body;
     try {
       const { token, user } = await AuthService.loginUser(email, password);
+      user.password = undefined;
       res.status(200).json({ token, user });
     } catch (err) {
       res.status(400).json({ message: err.message });

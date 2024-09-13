@@ -4,6 +4,7 @@ const AuthRepository = {
   findUserByEmail: async (email) => {
     return prisma.user.findUnique({
       where: { email },
+      deletedAt: null,
     });
   },
 

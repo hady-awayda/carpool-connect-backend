@@ -39,7 +39,7 @@ const AuthService = {
 
   loginUser: async (email, password) => {
     const user = await AuthRepository.findUserByEmail(email);
-    if (!user) {
+    if (!user || user.deletedAt !== null) {
       throw new Error("Invalid credentials");
     }
 

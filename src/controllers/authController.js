@@ -1,5 +1,7 @@
 import AuthService from "../services/authService.js";
 
+// Remove password hash from response
+
 const AuthController = {
   register: async (req, res) => {
     const { name, email, password, phoneNumber } = req.body;

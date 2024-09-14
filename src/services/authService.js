@@ -19,7 +19,7 @@ const generateJWT = (user) => {
 };
 
 const AuthService = {
-  registerUser: async (name, email, password) => {
+  registerUser: async (name, email, password, phoneNumber) => {
     const existingUser = await AuthRepository.findUserByEmail(email);
     if (existingUser) {
       throw new Error("User already exists");
@@ -30,6 +30,7 @@ const AuthService = {
       name,
       email,
       password: hashedPassword,
+      phoneNumber,
     });
 
     const token = generateJWT(newUser);
@@ -38,7 +39,7 @@ const AuthService = {
 
   loginUser: async (email, password) => {
     const user = await AuthRepository.findUserByEmail(email);
-    if (!user) {
+    if (!user || user.deletedAt !== null) {
       throw new Error("Invalid credentials");
     }
 

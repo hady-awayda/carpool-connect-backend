@@ -2,7 +2,9 @@ import ConversationService from "../services/conversationService.js";
 
 const ConversationController = {
   createConversation: async (req, res) => {
-    const { userId1, userId2 } = req.body;
+    const userId1 = req.user.id;
+    const { userId2 } = req.body;
+
     try {
       const conversation = await ConversationService.createConversation(
         userId1,
@@ -15,7 +17,9 @@ const ConversationController = {
   },
 
   findConversationByUserIds: async (req, res) => {
-    const { userId1, userId2 } = req.body;
+    const userId1 = req.user.id;
+    const { userId2 } = req.params;
+
     try {
       const conversation = await ConversationService.findConversationByUserIds(
         userId1,

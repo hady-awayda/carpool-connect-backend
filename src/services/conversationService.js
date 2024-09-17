@@ -12,6 +12,10 @@ const ConversationService = {
   getConversationById: async (conversationId) => {
     return await conversationRepository.getConversationById(conversationId);
   },
+
+  deleteConversation: async (conversationId) => {
+    return await conversationRepository.deleteConversation(conversationId);
+  },
 };
 
 export default ConversationService;

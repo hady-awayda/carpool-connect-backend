@@ -27,7 +27,7 @@ const ConversationRepository = {
   },
 
   getConversationsByUserId: async (userId) => {
-    return prisma.conversation.findMany({
+    return await prisma.conversation.findMany({
       where: {
         OR: [{ userId1: userId }, { userId2: userId }],
         deletedAt: null,
@@ -40,7 +40,7 @@ const ConversationRepository = {
   },
 
   getConversationById: async (conversationId) => {
-    return prisma.conversation.findUnique({
+    return await prisma.conversation.findUnique({
       where: { id: conversationId, deletedAt: null },
       include: {
         user1: true,
@@ -50,7 +50,7 @@ const ConversationRepository = {
   },
 
   deleteConversation: async (conversationId) => {
-    return prisma.conversation.update({
+    return await prisma.conversation.update({
       where: { id: conversationId },
       data: { deletedAt: new Date() },
     });

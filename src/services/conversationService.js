@@ -2,6 +2,10 @@ import ConversationRepository from "../repositories/conversationRepository.js";
 import MessageRepository from "../repositories/messageRepository.js";
 
 const ConversationService = {
+  createConversation: async (userId1, userId2) => {
+    return await ConversationRepository.createConversation(userId1, userId2);
+  },
+
   findConversationByUserIds: async (userId1, userId2) => {
     return await ConversationRepository.findConversationByUserIds(
       userId1,
@@ -15,6 +19,10 @@ const ConversationService = {
 
   findConversationById: async (conversationId) => {
     return await ConversationRepository.findConversationById(conversationId);
+  },
+
+  softDeleteConversation: async (conversationId) => {
+    return await ConversationRepository.softDeleteConversation(conversationId);
   },
 
   sendMessage: async (userId, conversationId, content) => {
@@ -36,14 +44,6 @@ const ConversationService = {
 
   softDeleteMessage: async (messageId) => {
     return await MessageRepository.softDeleteMessage(messageId);
-  },
-
-  createConversation: async (userId1, userId2) => {
-    return await ConversationRepository.createConversation(userId1, userId2);
-  },
-
-  softDeleteConversation: async (conversationId) => {
-    return await ConversationRepository.softDeleteConversation(conversationId);
   },
 };
 

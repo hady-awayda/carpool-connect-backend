@@ -34,7 +34,7 @@ const ConversationRepository = {
       where: {
         userId1: firstUserId,
         userId2: secondUserId,
-        deletedAt: null, // Only fetch active conversations
+        deletedAt: null,
       },
     });
   },
@@ -43,7 +43,7 @@ const ConversationRepository = {
     return await prisma.conversation.findMany({
       where: {
         OR: [{ userId1: userId }, { userId2: userId }],
-        deletedAt: null, // Only fetch active conversations
+        deletedAt: null,
       },
       include: {
         user1: true,

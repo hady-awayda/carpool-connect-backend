@@ -14,8 +14,9 @@ const PORT = process.env.PORT || 5000;
 app.use(express.json());
 
 app.use("/api/auth", authRoutes);
-app.use("/api/users", userRoutes);
 app.use("/api/ride-schedules", rideScheduleRoutes);
+app.use("/api/schedule-patterns", schedulePatternRoutes);
+app.use("/api/users", userRoutes);
 app.use("/api/user-matches", userMatchRoutes);
 
 setupSwaggerUI(app);

@@ -5,33 +5,36 @@ const UserService = {
     return await prisma.user.findMany({
       where: {
         id: parseInt(id),
-        deletedAt: null,
       },
       select: {
         id: true,
         name: true,
+        age: true,
         email: true,
+        password: false,
         role: true,
         phoneNumber: true,
         createdAt: true,
         updatedAt: true,
-        password: false,
+        deletedAt: null,
       },
     });
   },
 
   getUserById: async (id) => {
     return await prisma.user.findUnique({
-      where: { id: parseInt(id), deletedAt: null },
+      where: { id: parseInt(id) },
       select: {
         id: true,
         name: true,
+        age: true,
         email: true,
+        password: false,
         role: true,
         phoneNumber: true,
         createdAt: true,
         updatedAt: true,
-        password: false,
+        deletedAt: null,
       },
     });
   },
@@ -46,12 +49,14 @@ const UserService = {
       select: {
         id: true,
         name: true,
+        age: true,
         email: true,
+        password: false,
         role: true,
         phoneNumber: true,
         createdAt: true,
         updatedAt: true,
-        password: false,
+        deletedAt: null,
       },
     });
   },

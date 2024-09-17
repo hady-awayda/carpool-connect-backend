@@ -12,6 +12,7 @@ const RideScheduleRepository = {
       where: { userId, deletedAt: null },
       include: {
         ridePreferences: true,
+        schedulePattern: true,
       },
     });
   },
@@ -19,7 +20,7 @@ const RideScheduleRepository = {
   updateRideSchedule: async (id, data) => {
     return prisma.rideSchedule.update({
       where: { id, deletedAt: null },
-      data,
+      data: { ...data },
     });
   },
 

@@ -44,6 +44,7 @@ enum RideAgreementsStatusEnum {
 model User {
   id          Int           @id @default(autoincrement())
   name        String        @db.VarChar(255)
+  age         Int           @db.TinyInt
   email       String        @unique
   password    String        @db.VarChar(255)
   role        UserRolesEnum @default(user)
@@ -63,7 +64,8 @@ model User {
   user2Matches UserMatch[] @relation("User2")
 
   // Inverse relation for RideAgreement
-  proposedAgreements RideAgreement[] @relation("ProposedByUser")
+  proposedAgreements RideAgreement[]   @relation("ProposedByUser")
+  SchedulePattern    SchedulePattern[]
 }
 
 model RideSchedule {
@@ -75,6 +77,7 @@ model RideSchedule {
   destinationLat    Float
   destinationLng    Float
   ridePreferencesId Int
+  schedulePatternId Int
   departureTime     DateTime
   arrivalTime       DateTime
   isActive          Boolean          @default(true)
@@ -85,6 +88,7 @@ model RideSchedule {
   // Foreign Keys
   user            User            @relation(fields: [userId], references: [id])
   ridePreferences RidePreferences @relation(fields: [ridePreferencesId], references: [id])
+  schedulePattern SchedulePattern @relation(fields: [schedulePatternId], references: [id])
 
   // Inverse relations for MatchedRide
   matchedRide1 MatchedRide[] @relation("ride1")
@@ -103,6 +107,24 @@ model RidePreferences {
 
   // Foreign Key to RideSchedule
   RideSchedule RideSchedule[]
+}
+
+model SchedulePattern {
+  id            Int       @id @default(autoincrement())
+  userId        Int
+  mondayFlag    Boolean   @default(false)
+  tuesdayFlag   Boolean   @default(false)
+  wednesdayFlag Boolean   @default(false)
+  thursdayFlag  Boolean   @default(false)
+  fridayFlag    Boolean   @default(false)
+  saturdayFlag  Boolean   @default(false)
+  sundayFlag    Boolean   @default(false)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  deletedAt     DateTime?
+
+  user          User           @relation(fields: [userId], references: [id])
+  rideSchedules RideSchedule[]
 }
 
 model UserMatch {

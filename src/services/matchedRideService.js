@@ -18,24 +18,23 @@ const MatchedRideService = {
       user2AgreementStatus: "pending",
     };
 
-    return MatchedRideRepository.createMatchedRide(data);
+    return await MatchedRideRepository.createMatchedRide(data);
   },
 
   getMatchedRidesByUserId: async (userId) => {
-    return MatchedRideRepository.getMatchedRidesByUserId(userId);
+    return await MatchedRideRepository.getMatchedRidesByUserId(userId);
   },
 
   updateMatchedRideStatus: async (id, user1Status, user2Status) => {
-    return MatchedRideRepository.updateMatchedRideStatus(
+    return await MatchedRideRepository.updateMatchedRideStatus(
       id,
       user1Status,
       user2Status
     );
   },
 
-  // Soft delete a matched ride
   softDeleteMatchedRide: async (id) => {
-    return MatchedRideRepository.softDeleteMatchedRide(id);
+    return await MatchedRideRepository.softDeleteMatchedRide(id);
   },
 };
 

@@ -9,7 +9,7 @@ const RideAgreementService = {
       status: "pending",
     };
 
-    return RideAgreementRepository.createRideAgreement(rideAgreementData);
+    return await RideAgreementRepository.createRideAgreement(rideAgreementData);
   },
 
   updateRideAgreement: async (id, data, userId) => {
@@ -34,12 +34,12 @@ const RideAgreementService = {
       }
 
       // Allow modifying other fields as long as the status is pending
-      return RideAgreementRepository.updateRideAgreement(id, data);
+      return await RideAgreementRepository.updateRideAgreement(id, data);
     }
 
     // If the user is not the proposer, allow only the status update
     if ("status" in data) {
-      return RideAgreementRepository.updateRideAgreement(id, {
+      return await RideAgreementRepository.updateRideAgreement(id, {
         status: data.status,
       });
     }
@@ -65,7 +65,7 @@ const RideAgreementService = {
         );
       }
 
-      return RideAgreementRepository.softDeleteRideAgreement(id);
+      return await RideAgreementRepository.softDeleteRideAgreement(id);
     }
 
     throw new Error("Only the user who proposed can delete the agreement.");

@@ -11,7 +11,7 @@ const UserMatchService = {
       throw new Error("Match already exists or is pending approval");
     }
 
-    return UserMatchRepository.createMatchRequest(
+    return await UserMatchRepository.createMatchRequest(
       userId1,
       userId2,
       requestedBy
@@ -19,7 +19,7 @@ const UserMatchService = {
   },
 
   getUserMatches: async (userId) => {
-    return UserMatchRepository.getUserMatches(userId);
+    return await UserMatchRepository.getUserMatches(userId);
   },
 
   respondToMatchRequest: async (matchId, status, responseBy) => {
@@ -27,11 +27,15 @@ const UserMatchService = {
       throw new Error("Invalid status");
     }
 
-    return UserMatchRepository.updateMatchStatus(matchId, status, responseBy);
+    return await UserMatchRepository.updateMatchStatus(
+      matchId,
+      status,
+      responseBy
+    );
   },
 
   deleteUserMatch: async (matchId) => {
-    return UserMatchRepository.deleteUserMatch(matchId);
+    return await UserMatchRepository.deleteUserMatch(matchId);
   },
 };
 

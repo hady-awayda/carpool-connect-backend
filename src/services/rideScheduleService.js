@@ -10,7 +10,7 @@ const RideScheduleService = {
       });
 
     // Now create the ride schedule with reference to the preferences
-    return RideScheduleRepository.createRideSchedule({
+    return await RideScheduleRepository.createRideSchedule({
       ...rideScheduleData,
       userId,
       ridePreferencesId: ridePreferences.id,
@@ -38,11 +38,11 @@ const RideScheduleService = {
   },
 
   updateRideSchedule: async (id, rideScheduleData) => {
-    return RideScheduleRepository.updateRideSchedule(id, rideScheduleData);
+    return await RideScheduleRepository.updateRideSchedule(id, rideScheduleData);
   },
 
   updateRidePreferences: async (id, preferencesData) => {
-    return RidePreferencesRepository.updateRidePreferences(id, preferencesData);
+    return await RidePreferencesRepository.updateRidePreferences(id, preferencesData);
   },
 
   // Soft delete both the ride schedule and its associated preferences
@@ -56,7 +56,7 @@ const RideScheduleService = {
     );
 
     // Then soft delete the ride schedule
-    return RideScheduleRepository.softDeleteRideSchedule(rideScheduleId);
+    return await RideScheduleRepository.softDeleteRideSchedule(rideScheduleId);
   },
 };
 

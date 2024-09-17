@@ -1,11 +1,14 @@
 import userPreferenceRepository from "../repositories/userPreferenceRepository.js";
 
 const userPreferenceService = {
+  createUserPreference: async (userId, data) => {
+    return await userPreferenceRepository.createUserPreference(userId, data);
+  },
+
   getUserPreference: async (userId) => {
     let preference = await userPreferenceRepository.getUserPreference(userId);
 
     if (!preference) {
-      // Create default preference if not exists
       preference = await userPreferenceRepository.createUserPreference(
         userId,
         {}
@@ -16,8 +19,12 @@ const userPreferenceService = {
   },
 
   updateUserPreference: async (userId, data) => {
-    return userPreferenceRepository.updateUserPreference(userId, data);
+    return await userPreferenceRepository.updateUserPreference(userId, data);
   },
 
-  // Additional service methods as needed
+  deleteUserPreference: async (userId) => {
+    return await userPreferenceRepository.deleteUserPreference(userId);
+  },
 };
+
+export default userPreferenceService;

@@ -8,7 +8,8 @@ const RidePreferencesRepository = {
   },
 
   getRidePreferencesByRideScheduleId: async (ridePreferencesId) => {
-    return prisma.ridePreferences.findUnique({
+    // find all ride preferences by ride schedule id
+    return prisma.ridePreferences.findMany({
       where: { id: ridePreferencesId, deletedAt: null },
     });
   },

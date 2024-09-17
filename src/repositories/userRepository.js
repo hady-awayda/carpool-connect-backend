@@ -63,7 +63,7 @@ const UserService = {
 
   deleteUser: async (id) => {
     return await prisma.user.delete({
-      where: { id: parseInt(id) },
+      where: { id: parseInt(id), deletedAt: null },
       data: {
         deletedAt: new Date(),
       },

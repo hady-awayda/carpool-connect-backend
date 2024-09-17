@@ -31,6 +31,15 @@ const UserMatchRepository = {
       },
     });
   },
+
+  deleteUserMatch: async (matchId) => {
+    return prisma.userMatch.update({
+      where: { id: matchId, deletedAt: null },
+      data: {
+        deletedAt: new Date(),
+      },
+    });
+  },
 };
 
 export default UserMatchRepository;

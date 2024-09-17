@@ -15,7 +15,7 @@ const RidePreferencesRepository = {
 
   updateRidePreferences: async (id, data) => {
     return prisma.ridePreferences.update({
-      where: { id },
+      where: { id, deletedAt: null },
       data,
     });
   },

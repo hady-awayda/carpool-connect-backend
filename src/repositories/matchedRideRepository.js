@@ -8,10 +8,9 @@ const MatchedRideRepository = {
   },
 
   getMatchedRidesByUserId: async (userId) => {
-    // Retrieve matched rides where the user is either in rideScheduleId1 or rideScheduleId2 and not soft deleted
     return prisma.matchedRide.findMany({
       where: {
-        deletedAt: null, // Exclude soft-deleted matched rides
+        deletedAt: null,
         OR: [
           { rideSchedule1: { userId: userId } },
           { rideSchedule2: { userId: userId } },
@@ -26,7 +25,7 @@ const MatchedRideRepository = {
 
   updateMatchedRideStatus: async (id, user1Status, user2Status) => {
     return prisma.matchedRide.update({
-      where: { id },
+      where: { id, deletedAt: null },
       data: {
         user1AgreementStatus: user1Status,
         user2AgreementStatus: user2Status,
@@ -34,12 +33,11 @@ const MatchedRideRepository = {
     });
   },
 
-  // Soft delete a matched ride
   softDeleteMatchedRide: async (id) => {
     return prisma.matchedRide.update({
       where: { id },
       data: {
-        deletedAt: new Date(), // Mark as deleted
+        deletedAt: new Date(),
       },
     });
   },

@@ -22,7 +22,7 @@ const UserService = {
 
   getUserById: async (id) => {
     return await prisma.user.findUnique({
-      where: { id: parseInt(id) },
+      where: { id: parseInt(id), deletedAt: null },
       select: {
         id: true,
         name: true,

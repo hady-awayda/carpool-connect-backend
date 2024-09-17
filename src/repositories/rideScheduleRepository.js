@@ -18,7 +18,7 @@ const RideScheduleRepository = {
 
   updateRideSchedule: async (id, data) => {
     return prisma.rideSchedule.update({
-      where: { id },
+      where: { id, deletedAt: null },
       data,
     });
   },

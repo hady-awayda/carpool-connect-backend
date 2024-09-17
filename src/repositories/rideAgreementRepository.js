@@ -9,7 +9,7 @@ const RideAgreementRepository = {
 
   updateRideAgreement: async (id, data) => {
     return prisma.rideAgreement.update({
-      where: { id },
+      where: { id, deletedAt: null },
       data,
     });
   },

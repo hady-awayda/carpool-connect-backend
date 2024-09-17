@@ -5,5 +5,5 @@
 # First install all dependencies
 
 ```bash
-	npm i bcrypt axios
+	npm i
 ```

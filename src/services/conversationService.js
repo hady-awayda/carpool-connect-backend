@@ -1,20 +1,49 @@
 import ConversationRepository from "../repositories/conversationRepository.js";
+import MessageRepository from "../repositories/messageRepository.js";
 
 const ConversationService = {
+  findConversationByUserIds: async (userId1, userId2) => {
+    return await ConversationRepository.findConversationByUserIds(
+      userId1,
+      userId2
+    );
+  },
+
+  findUserConversations: async (userId) => {
+    return await ConversationRepository.findUserConversations(userId);
+  },
+
+  findConversationById: async (conversationId) => {
+    return await ConversationRepository.findConversationById(conversationId);
+  },
+
+  sendMessage: async (userId, conversationId, content) => {
+    const conversation = await ConversationRepository.findConversationById(
+      conversationId
+    );
+    if (
+      !conversation ||
+      (conversation.userId1 !== userId && conversation.userId2 !== userId)
+    ) {
+      throw new Error("User not part of this conversation.");
+    }
+    return await MessageRepository.sendMessage(conversationId, userId, content);
+  },
+
+  getMessagesByConversationId: async (conversationId) => {
+    return await MessageRepository.getMessagesByConversationId(conversationId);
+  },
+
+  softDeleteMessage: async (messageId) => {
+    return await MessageRepository.softDeleteMessage(messageId);
+  },
+
   createConversation: async (userId1, userId2) => {
-    return await conversationRepository.createConversation(userId1, userId2);
+    return await ConversationRepository.createConversation(userId1, userId2);
   },
 
-  getUserConversations: async (userId) => {
-    return await conversationRepository.getConversationsByUserId(userId);
-  },
-
-  getConversationById: async (conversationId) => {
-    return await conversationRepository.getConversationById(conversationId);
-  },
-
-  deleteConversation: async (conversationId) => {
-    return await conversationRepository.deleteConversation(conversationId);
+  softDeleteConversation: async (conversationId) => {
+    return await ConversationRepository.softDeleteConversation(conversationId);
   },
 };
 

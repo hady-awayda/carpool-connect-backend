@@ -3,13 +3,10 @@ import SchedulePatternController from "../controllers/schedulePatternController.
 
 const router = express.Router();
 
-router.post("/schedule-pattern", SchedulePatternController.create);
-router.get("/schedule-pattern/:id", SchedulePatternController.getById);
-router.get(
-  "/schedule-pattern/user/:userId",
-  SchedulePatternController.getByUserId
-);
-router.put("/schedule-pattern/:id", SchedulePatternController.update);
-router.delete("/schedule-pattern/:id", SchedulePatternController.delete);
+router.post("", SchedulePatternController.create);
+router.get("/:id", SchedulePatternController.getById);
+router.get("/user/:userId", SchedulePatternController.getByUserId);
+router.put("/:id", SchedulePatternController.update);
+router.delete("/:id", SchedulePatternController.delete);
 
 export default router;

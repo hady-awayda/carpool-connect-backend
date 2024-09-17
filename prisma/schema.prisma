@@ -57,8 +57,9 @@ model User {
   deletedBy   Int?
 
   // Relationships
-  rideSchedules RideSchedule[]
-  schedulePatterns SchedulePattern[]
+  userSchedules         UserSchedule[]
+  schedulePreferences   SchedulePreference[]
+  schedulePatterns      SchedulePattern[]
 
   // Inverse relations for UserMatch
   user1Matches UserMatch[] @relation("User1")
@@ -69,10 +70,10 @@ model User {
   SchedulePattern    SchedulePattern[]
 }
 
-model RideSchedule {
+model UserSchedules {
   id                Int              @id @default(autoincrement())
   userId            Int
-  rideUserType      RideUserTypeEnum @default(rider)
+  schedule_type     RideUserTypeEnum @default(rider)
   departureLat      Float
   departureLng      Float
   destinationLat    Float
@@ -88,7 +89,7 @@ model RideSchedule {
 
   // Foreign Keys
   user            User            @relation(fields: [userId], references: [id])
-  ridePreferences RidePreferences @relation(fields: [ridePreferencesId], references: [id])
+  SchedulePreferences SchedulePreferences @relation(fields: [SchedulePreferencesId], references: [id])
   schedulePattern SchedulePattern @relation(fields: [schedulePatternId], references: [id])
 
   // Inverse relations for MatchedRide
@@ -96,7 +97,7 @@ model RideSchedule {
   matchedRide2 MatchedRide[] @relation("ride2")
 }
 
-model RidePreferences {
+model schedulePreferences {
   id                     Int       @id @default(autoincrement())
   maxProximityKm         Float     @default(5.00)
   maxTimeDeviationMin    Int       @default(10)
@@ -106,8 +107,8 @@ model RidePreferences {
   updatedAt              DateTime  @updatedAt
   deletedAt              DateTime?
 
-  // Foreign Key to RideSchedule
-  RideSchedule RideSchedule[]
+  // Foreign Key to userSchedule
+  userSchedule userSchedule[]
 }
 
 model SchedulePattern {
@@ -208,4 +209,41 @@ model UserPreference {
 
   // Relationships
   user User @relation(fields: [userId], references: [id])
+}
+
+model Conversation {
+  id        Int      @id @default(autoincrement())
+  userId1   Int
+  userId2   Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deletedAt DateTime?
+  createdBy Int?
+  updatedBy Int?
+  deletedBy Int?
+
+  // Relationships
+  user1    User      @relation("ConversationUser1", fields: [userId1], references: [id])
+  user2    User      @relation("ConversationUser2", fields: [userId2], references: [id])
+  messages Message[]
+
+  @@unique([userId1, userId2], name: "unique_conversation")
+}
+
+model Message {
+  id             Int          @id @default(autoincrement())
+  conversationId Int
+  senderId       Int
+  content        String
+  isRead         Boolean      @default(false)
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  deletedAt      DateTime?
+  createdBy      Int?
+  updatedBy      Int?
+  deletedBy      Int?
+
+  // Relationships
+  conversation Conversation @relation(fields: [conversationId], references: [id])
+  sender       User         @relation("MessagesSent", fields: [senderId], references: [id])
 }

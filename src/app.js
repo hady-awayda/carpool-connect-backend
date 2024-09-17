@@ -7,6 +7,7 @@ import rideAgreementRoutes from "./routes/rideAgreementRoutes.js";
 import rideScheduleRoutes from "./routes/rideScheduleRoutes.js";
 import schedulePatternRoutes from "./routes/schedulePatternRoutes.js";
 import userMatchRoutes from "./routes/userMatchRoutes.js";
+import userPreferenceRoutes from "./routes/userPreferenceRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 
 dotenv.config();
@@ -22,6 +23,7 @@ app.use("/api/ride-agreements", rideAgreementRoutes);
 app.use("/api/ride-schedules", rideScheduleRoutes);
 app.use("/api/schedule-patterns", schedulePatternRoutes);
 app.use("/api/user-matches", userMatchRoutes);
+app.use("/api/usersPreferences", userPreferenceRoutes);
 app.use("/api/users", userRoutes);
 
 setupSwaggerUI(app);

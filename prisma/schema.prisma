@@ -58,6 +58,7 @@ model User {
 
   // Relationships
   rideSchedules RideSchedule[]
+  schedulePatterns SchedulePattern[]
 
   // Inverse relations for UserMatch
   user1Matches UserMatch[] @relation("User1")
@@ -183,4 +184,28 @@ model RideAgreement {
 
   matchedRide    MatchedRide @relation(fields: [matchedRideId], references: [id])
   proposedByUser User        @relation("ProposedByUser", fields: [proposedBy], references: [id])
+}
+
+model UserPreference {
+  id                              Int       @id @default(autoincrement())
+  userId                          Int       @unique
+  prefersRideSharing              Boolean   @default(true)
+  carPreferences                  String?
+  routePreferences                String?
+  smokingPreferences              String?
+  temperaturePreferences          String?
+  musicPreferences                String?
+  languagePreferences             String?
+  politicsPreferences             String?
+  petPreferences                  String?
+  chattingPreferences             String?
+  commutingFrequency              String?
+  commuteFrequencyPreferences     String?
+  defaultCarId                    Int?
+  createdAt                       DateTime  @default(now())
+  updatedAt                       DateTime  @updatedAt
+  deletedAt                       DateTime?
+
+  // Relationships
+  user User @relation(fields: [userId], references: [id])
 }

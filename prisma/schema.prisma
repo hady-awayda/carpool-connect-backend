@@ -7,7 +7,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// Enums
 enum UserTypeEnum {
   user
   admin
@@ -50,7 +49,6 @@ enum RideAgreementsStatusEnum {
   rejected
 }
 
-// Models
 model User {
   id           Int           @id @default(autoincrement())
   name         String        @db.VarChar(255)
@@ -61,20 +59,7 @@ model User {
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
   deletedAt    DateTime?
-  createdById  Int?
-  updatedById  Int?
-  deletedById  Int?
 
-  // Self-relations
-  createdBy    User?          @relation("UserCreatedBy", fields: [createdById], references: [id])
-  updatedBy    User?          @relation("UserUpdatedBy", fields: [updatedById], references: [id])
-  deletedBy    User?          @relation("UserDeletedBy", fields: [deletedById], references: [id])
-
-  createdUsers User[]         @relation("UserCreatedBy")
-  updatedUsers User[]         @relation("UserUpdatedBy")
-  deletedUsers User[]         @relation("UserDeletedBy")
-
-  // Relationships
   userSchedules      UserSchedules[]
   notifications      Notification[]
   userPreference     UserPreferences?
@@ -82,11 +67,21 @@ model User {
   userInformation    UserInformation?
   userMatches1       UserMatch[]        @relation("UserMatchUser1")
   userMatches2       UserMatch[]        @relation("UserMatchUser2")
-  messages           Message[]
+  messages           Message[]          @relation("UserMessages")
 
-  // Conversations
   conversations1     Conversation[]     @relation("ConversationUser1")
   conversations2     Conversation[]     @relation("ConversationUser2")
+
+  userMatchesRequestedBy UserMatch[] @relation("UserMatchRequestedBy")
+  userMatchesApprovedBy UserMatch[] @relation("UserMatchApprovedBy")
+  userMatchesUpdatedBy UserMatch[] @relation("UserMatchUpdatedBy")
+  userMatchesDeletedBy UserMatch[] @relation("UserMatchDeletedBy")
+
+  carInformation CarInformation[]
+  userPayments UserPayments?
+  userBalance UserBalance?
+  userWithdrawals UserWithdrawals?
+  userDocument UserDocument?
 }
 
 model MatchedSchedules {
@@ -94,7 +89,7 @@ model MatchedSchedules {
   userScheduleId1          Int
   userScheduleId2          Int
   routeDeviationTimeMin    Int                   @default(0)
-  routeDeviationDistanceKm Float                 @default(0.00) @db.Decimal(5, 2)
+  routeDeviationDistanceKm Decimal                  @default(0.00) @db.Decimal(5, 2) 
   agreedDepartureTime      DateTime              @db.Time
   agreedArrivalTime        DateTime              @db.Time
   carDetails               String?               @db.VarChar(255)
@@ -106,18 +101,10 @@ model MatchedSchedules {
   createdAt                DateTime              @default(now())
   updatedAt                DateTime              @updatedAt
   deletedAt                DateTime?
-  createdById              Int?
-  updatedById              Int?
-  deletedById              Int?
 
-  // Relationships
   userSchedule1  UserSchedules    @relation("MatchedSchedulesRide1", fields: [userScheduleId1], references: [id])
   userSchedule2  UserSchedules    @relation("MatchedSchedulesRide2", fields: [userScheduleId2], references: [id])
   contactInfo    ContactInformation @relation(fields: [contactInfoId], references: [id])
-
-  createdBy      User?           @relation("MatchedSchedulesCreatedBy", fields: [createdById], references: [id])
-  updatedBy      User?           @relation("MatchedSchedulesUpdatedBy", fields: [updatedById], references: [id])
-  deletedBy      User?           @relation("MatchedSchedulesDeletedBy", fields: [deletedById], references: [id])
 
   scheduleAgreements ScheduleAgreement[]
 }
@@ -126,10 +113,10 @@ model UserSchedules {
   id                    Int              @id @default(autoincrement())
   userId                Int
   scheduleType          ScheduleTypeEnum @default(rider)
-  departureLat          Float            @db.Decimal(10, 7)
-  departureLng          Float            @db.Decimal(10, 7)
-  destinationLat        Float            @db.Decimal(10, 7)
-  destinationLng        Float            @db.Decimal(10, 7)
+  departureLat          Decimal          @db.Decimal(10, 7)
+  departureLng          Decimal          @db.Decimal(10, 7)
+  destinationLat        Decimal          @db.Decimal(10, 7)
+  destinationLng        Decimal          @db.Decimal(10, 7)
   departureTime         DateTime         @db.Time
   arrivalTime           DateTime         @db.Time
   selectedCar           String?          @db.VarChar(255)
@@ -140,25 +127,20 @@ model UserSchedules {
   createdAt             DateTime         @default(now())
   updatedAt             DateTime         @updatedAt
   deletedAt             DateTime?
-  createdById           Int?
-  updatedById           Int?
-  deletedById           Int?
 
-  // Relationships
   user                User               @relation(fields: [userId], references: [id])
   schedulePattern     SchedulePattern    @relation(fields: [schedulePatternId], references: [id])
   schedulePreference  SchedulePreference @relation(fields: [schedulePreferencesId], references: [id])
 
-  createdBy           User?              @relation("UserSchedulesCreatedBy", fields: [createdById], references: [id])
-  updatedBy           User?              @relation("UserSchedulesUpdatedBy", fields: [updatedById], references: [id])
-  deletedBy           User?              @relation("UserSchedulesDeletedBy", fields: [deletedById], references: [id])
+  matchedSchedules1  MatchedSchedules[]  @relation("MatchedSchedulesRide1")
+  matchedSchedules2  MatchedSchedules[]  @relation("MatchedSchedulesRide2")
 
   @@index([userId], name: "idx_user_id")
 }
 
 model SchedulePreference {
   id                     Int       @id @default(autoincrement())
-  maxProximityKm         Float     @default(5.00) @db.Decimal(5, 2)
+  maxProximityKm         Decimal   @default(5.00) @db.Decimal(5, 2)
   maxTimeDeviationMin    Int       @default(10)
   preferredRideDeparture DateTime? @db.Time
   preferredRideArrival   DateTime? @db.Time
@@ -204,19 +186,12 @@ model UserPreferences {
   createdAt                  DateTime  @default(now())
   updatedAt                  DateTime  @updatedAt
   deletedAt                  DateTime?
-  createdById                Int?
-  updatedById                Int?
-  deletedById                Int?
 
-  // Relationships
   user          User          @relation(fields: [userId], references: [id])
   defaultCar    CarInformation? @relation(fields: [defaultCarId], references: [id])
 
-  createdBy     User?         @relation("UserPreferencesCreatedBy", fields: [createdById], references: [id])
-  updatedBy     User?         @relation("UserPreferencesUpdatedBy", fields: [updatedById], references: [id])
-  deletedBy     User?         @relation("UserPreferencesDeletedBy", fields: [deletedById], references: [id])
-
   @@unique([userId], name: "unique_user_preferences")
+  @@index([userId], name: "idx_user_id")
 }
 
 model UserInformation {
@@ -233,11 +208,7 @@ model UserInformation {
   createdAt             DateTime                 @default(now())
   updatedAt             DateTime                 @updatedAt
   deletedAt             DateTime?
-  createdById           Int?
-  updatedById           Int?
-  deletedById           Int?
 
-  // Relationships
   user                  User                     @relation(fields: [userId], references: [id])
   personalInformation   UserPersonalInformation? @relation(fields: [personalInformationId], references: [id])
   contactInformation    ContactInformation?      @relation(fields: [contactInformationId], references: [id])
@@ -247,10 +218,6 @@ model UserInformation {
   userBalance           UserBalance?             @relation(fields: [userBalanceId], references: [id])
   userWithdrawals       UserWithdrawals?         @relation(fields: [userWithdrawalsId], references: [id])
   userDocuments         UserDocument?            @relation(fields: [userDocumentsId], references: [id])
-
-  createdBy             User?                    @relation("UserInformationCreatedBy", fields: [createdById], references: [id])
-  updatedBy             User?                    @relation("UserInformationUpdatedBy", fields: [updatedById], references: [id])
-  deletedBy             User?                    @relation("UserInformationDeletedBy", fields: [deletedById], references: [id])
 }
 
 model UserPersonalInformation {
@@ -261,16 +228,8 @@ model UserPersonalInformation {
   createdAt   DateTime       @default(now())
   updatedAt   DateTime       @updatedAt
   deletedAt   DateTime?
-  createdById Int?
-  updatedById Int?
-  deletedById Int?
 
-  // Relationships
   user        User           @relation(fields: [userId], references: [id])
-
-  createdBy   User?          @relation("UserPersonalInformationCreatedBy", fields: [createdById], references: [id])
-  updatedBy   User?          @relation("UserPersonalInformationUpdatedBy", fields: [updatedById], references: [id])
-  deletedBy   User?          @relation("UserPersonalInformationDeletedBy", fields: [deletedById], references: [id])
 }
 
 model ContactInformation {
@@ -280,16 +239,8 @@ model ContactInformation {
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt
   deletedAt    DateTime?
-  createdById  Int?
-  updatedById  Int?
-  deletedById  Int?
 
-  // Relationships
   user         User          @relation(fields: [userId], references: [id])
-
-  createdBy    User?         @relation("ContactInformationCreatedBy", fields: [createdById], references: [id])
-  updatedBy    User?         @relation("ContactInformationUpdatedBy", fields: [updatedById], references: [id])
-  deletedBy    User?         @relation("ContactInformationDeletedBy", fields: [deletedById], references: [id])
 }
 
 model UserAddress {
@@ -300,16 +251,8 @@ model UserAddress {
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt
   deletedAt    DateTime?
-  createdById  Int?
-  updatedById  Int?
-  deletedById  Int?
 
-  // Relationships
   user         User          @relation(fields: [userId], references: [id])
-
-  createdBy    User?         @relation("UserAddressCreatedBy", fields: [createdById], references: [id])
-  updatedBy    User?         @relation("UserAddressUpdatedBy", fields: [updatedById], references: [id])
-  deletedBy    User?         @relation("UserAddressDeletedBy", fields: [deletedById], references: [id])
 }
 
 model CarInformation {
@@ -322,16 +265,8 @@ model CarInformation {
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt
   deletedAt    DateTime?
-  createdById  Int?
-  updatedById  Int?
-  deletedById  Int?
 
-  // Relationships
   user         User       @relation(fields: [userId], references: [id])
-
-  createdBy    User?      @relation("CarInformationCreatedBy", fields: [createdById], references: [id])
-  updatedBy    User?      @relation("CarInformationUpdatedBy", fields: [updatedById], references: [id])
-  deletedBy    User?      @relation("CarInformationDeletedBy", fields: [deletedById], references: [id])
 }
 
 model Conversation {
@@ -341,18 +276,10 @@ model Conversation {
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
   deletedAt   DateTime?
-  createdById Int?
-  updatedById Int?
-  deletedById Int?
 
-  // Relationships
   user1       User      @relation("ConversationUser1", fields: [userId1], references: [id])
   user2       User      @relation("ConversationUser2", fields: [userId2], references: [id])
   messages    Message[]
-
-  createdBy   User?     @relation("ConversationCreatedBy", fields: [createdById], references: [id])
-  updatedBy   User?     @relation("ConversationUpdatedBy", fields: [updatedById], references: [id])
-  deletedBy   User?     @relation("ConversationDeletedBy", fields: [deletedById], references: [id])
 
   @@unique([userId1, userId2], name: "unique_conversation")
 }
@@ -366,17 +293,9 @@ model Message {
   createdAt      DateTime      @default(now())
   updatedAt      DateTime      @updatedAt
   deletedAt      DateTime?
-  createdById    Int?
-  updatedById    Int?
-  deletedById    Int?
 
-  // Relationships
   conversation   Conversation  @relation(fields: [conversationId], references: [id])
   sender         User          @relation("MessagesSent", fields: [senderId], references: [id])
-
-  createdBy      User?         @relation("MessageCreatedBy", fields: [createdById], references: [id])
-  updatedBy      User?         @relation("MessageUpdatedBy", fields: [updatedById], references: [id])
-  deletedBy      User?         @relation("MessageDeletedBy", fields: [deletedById], references: [id])
 }
 
 model Notification {
@@ -387,16 +306,8 @@ model Notification {
   createdAt    DateTime   @default(now())
   updatedAt    DateTime   @updatedAt
   deletedAt    DateTime?
-  createdById  Int?
-  updatedById  Int?
-  deletedById  Int?
 
-  // Relationships
   user         User       @relation(fields: [userId], references: [id])
-
-  createdBy    User?      @relation("NotificationCreatedBy", fields: [createdById], references: [id])
-  updatedBy    User?      @relation("NotificationUpdatedBy", fields: [updatedById], references: [id])
-  deletedBy    User?      @relation("NotificationDeletedBy", fields: [deletedById], references: [id])
 
   @@index([userId], name: "idx_user_id")
 }
@@ -405,7 +316,7 @@ model ScheduleAgreement {
   id                             Int                       @id @default(autoincrement())
   matchedRideId                  Int
   proposedRouteDeviationTimeMin  Int                       @default(0)
-  proposedRouteDeviationDistanceKm Float                   @default(0.00) @db.Decimal(5, 2)
+  proposedRouteDeviationDistanceKm Decimal                    @default(0.00) @db.Decimal(5, 2)
   proposedDepartureTime          DateTime                  @db.Time
   proposedArrivalTime            DateTime                  @db.Time
   status                         RideAgreementsStatusEnum  @default(pending)
@@ -413,15 +324,150 @@ model ScheduleAgreement {
   createdAt                      DateTime                  @default(now())
   updatedAt                      DateTime                  @updatedAt
   deletedAt                      DateTime?
-  createdById                    Int?
-  updatedById                    Int?
-  deletedById                    Int?
 
-  // Relationships
-  matchedRide    MatchedSchedule @relation(fields: [matchedRideId], references: [id])
+  matchedRide    MatchedSchedules @relation(fields: [matchedRideId], references: [id])
   proposedBy     User            @relation(fields: [proposedById], references: [id])
+}
 
-  createdBy      User?           @relation("ScheduleAgreementCreatedBy", fields: [createdById], references: [id])
-  updatedBy      User?           @relation("ScheduleAgreementUpdatedBy", fields: [updatedById], references: [id])
-  deletedBy      User?           @relation("ScheduleAgreementDeletedBy", fields: [deletedById], references: [id])
+model UserPayments {
+  id           Int       @id @default(autoincrement())
+  userId       Int       @unique
+  phoneNumber  String?   @db.VarChar(255)
+  contactInfo  Int
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @default(now()) @updatedAt
+  deletedAt    DateTime? @default(now())
+
+  user         User          @relation(fields: [userId], references: [id])
+}
+
+model UserBalance {
+  id           Int       @id @default(autoincrement())
+  userId       Int       @unique
+  phoneNumber  String?   @db.VarChar(255)
+  contactInfo  Int
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @default(now()) @updatedAt
+  deletedAt    DateTime? @default(now())
+
+  user         User          @relation(fields: [userId], references: [id])
+}
+
+model UserWithdrawals {
+  id           Int       @id @default(autoincrement())
+  userId       Int       @unique
+  phoneNumber  String?   @db.VarChar(255)
+  contactInfo  Int
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @default(now()) @updatedAt
+  deletedAt    DateTime? @default(now())
+
+  user         User          @relation(fields: [userId], references: [id])
+}
+
+model UserDocument {
+  id            Int       @id @default(autoincrement())
+  documentsUrl  String?   @db.VarChar(255)
+  userId        Int       @unique
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @default(now()) @updatedAt
+  deletedAt     DateTime? @default(now())
+
+  user          User       @relation(fields: [userId], references: [id])
+}
+
+model UserProfile {
+  id                       Int                    @id @default(autoincrement())
+  userId                   Int                    @unique
+  reputationScoreId         Int
+  punctualityScoreId        Int
+  carbonFootprintReductionId Int
+  recentReviewsId           Int?
+  createdAt                DateTime               @default(now())
+  updatedAt                DateTime               @updatedAt
+  deletedAt                DateTime?
+
+  user                     User                   @relation(fields: [userId], references: [id])
+  reputationScore           UserReputation         @relation(fields: [reputationScoreId], references: [id])
+  punctualityScore          UserPunctuality        @relation(fields: [punctualityScoreId], references: [id])
+  carbonFootprintReduction  UserCarbonFootprint    @relation(fields: [carbonFootprintReductionId], references: [id])
+  recentReviews             UserReviews?           @relation(fields: [recentReviewsId], references: [id])
+}
+
+model UserReputation {
+  id                   Int       @id @default(autoincrement())
+  reputationRating      Decimal      @db.Decimal(10, 7)
+  reputationDetails     String?   @db.VarChar(255)
+  userId                Int
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+  deletedAt             DateTime?
+
+  user                  User       @relation(fields: [userId], references: [id])
+}
+
+model UserPunctuality {
+  id                   Int       @id @default(autoincrement())
+  punctualityRating     Decimal      @db.Decimal(10, 7)
+  punctualityDetails    String?   @db.VarChar(255)
+  userId                Int
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+  deletedAt             DateTime?
+
+  user                  User       @relation(fields: [userId], references: [id])
+}
+
+model UserCarbonFootprint {
+  id                   Int       @id @default(autoincrement())
+  carbonFootprintRating Decimal      @db.Decimal(10, 7)
+  carbonFootprintDetails String?  @db.VarChar(255)
+  userId                Int
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+  deletedAt             DateTime?
+
+  user                  User       @relation(fields: [userId], references: [id])
+}
+
+model UserReviews {
+  id                   Int       @id @default(autoincrement())
+  reviewRating         Decimal      @db.Decimal(10, 7)
+  reviewDetails        String?   @db.VarChar(255)
+  userId               Int
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
+  deletedAt            DateTime?
+
+  user                 User       @relation(fields: [userId], references: [id])
+}
+
+model UserMatch {
+  id                 Int                        @id @default(autoincrement())
+  userId1            Int
+  userId2            Int
+  status             UserRelationshipsStatusEnum @default(requested)
+  matchedRouteId     Int?
+  endedAt            DateTime?
+  partnershipStart   DateTime?
+  partnershipEnd     DateTime?
+  requestedById      Int
+  approvedById       Int?
+  requestedAt        DateTime                   @default(now())
+  approvedAt         DateTime?
+  updatedAt          DateTime                   @updatedAt
+  deletedAt          DateTime?
+  updatedById        Int?
+  deletedById        Int?
+
+  user1              User                      @relation("UserMatchUser1", fields: [userId1], references: [id])
+  user2              User                      @relation("UserMatchUser2", fields: [userId2], references: [id])
+  requestedBy        User                      @relation("UserMatchRequestedBy", fields: [requestedById], references: [id])
+  approvedBy         User?                     @relation("UserMatchApprovedBy", fields: [approvedById], references: [id])
+
+  updatedBy          User?                     @relation("UserMatchUpdatedBy", fields: [updatedById], references: [id])
+  deletedBy          User?                     @relation("UserMatchDeletedBy", fields: [deletedById], references: [id])
+
+  @@unique([userId1, userId2], name: "unique_user_pair")
+  @@index([status], name: "idx_status")
 }

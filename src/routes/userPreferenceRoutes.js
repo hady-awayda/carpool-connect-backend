@@ -1,14 +1,31 @@
 import UserPreferenceController from "../controllers/userPreferenceController.js";
 import { Router } from "express";
+import userAuthorization from "../middleware/userAuthorization.js";
 
 const router = Router();
 
-router.post("", UserPreferenceController.createUserPreference);
+router.post(
+  "/",
+  userAuthorization,
+  UserPreferenceController.createUserPreference
+);
 
-router.get("/:id", UserPreferenceController.getUserPreference);
+router.get(
+  "/:id",
+  userAuthorization,
+  UserPreferenceController.getUserPreference
+);
 
-router.put("/:id", UserPreferenceController.updateUserPreference);
+router.put(
+  "/:id",
+  userAuthorization,
+  UserPreferenceController.updateUserPreference
+);
 
-router.delete("/:id", UserPreferenceController.deleteUserPreference);
+router.delete(
+  "/:id",
+  userAuthorization,
+  UserPreferenceController.deleteUserPreference
+);
 
 export default router;

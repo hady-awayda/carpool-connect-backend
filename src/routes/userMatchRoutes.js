@@ -1,15 +1,19 @@
 import express from "express";
 import UserMatchController from "../controllers/userMatchController.js";
+import userAuthorization from "../middleware/userAuthorization.js";
 
 const router = express.Router();
 
-// Route to create a match request
-router.post("/create", UserMatchController.createMatchRequest);
-
-// Route to get all matches for a user
-router.get("/:userId", UserMatchController.getUserMatches);
-
-// Route to approve or decline a match request
-router.put("/:matchId/respond", UserMatchController.respondToMatchRequest);
+router.post(
+  "/create",
+  userAuthorization,
+  UserMatchController.createMatchRequest
+);
+router.get("/:userId", userAuthorization, UserMatchController.getUserMatches);
+router.put(
+  "/:matchId/respond",
+  userAuthorization,
+  UserMatchController.respondToMatchRequest
+);
 
 export default router;

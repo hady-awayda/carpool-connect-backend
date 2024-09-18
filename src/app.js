@@ -10,11 +10,11 @@ import schedulePatternRoutes from "./routes/schedulePatternRoutes.js";
 import userMatchRoutes from "./routes/userMatchRoutes.js";
 import userPreferenceRoutes from "./routes/userPreferenceRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
+import analyticsRoutes from "./routes/analyticsRoutes.js";
 
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 5000;
 
 app.use(express.json());
 
@@ -27,6 +27,7 @@ app.use("/api/schedulePatterns", schedulePatternRoutes);
 app.use("/api/userMatches", userMatchRoutes);
 app.use("/api/usersPreferences", userPreferenceRoutes);
 app.use("/api/users", userRoutes);
+app.use("/api", analyticsRoutes);
 
 setupSwaggerUI(app);
 
@@ -34,6 +35,4 @@ app.get("/health", (req, res) => {
   res.status(200).send("OK");
 });
 
-app.listen(PORT, "0.0.0.0", () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
-});
+export default app;

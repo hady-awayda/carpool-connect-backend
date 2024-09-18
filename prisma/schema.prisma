@@ -128,17 +128,17 @@ model UserSchedules {
   departureTime         DateTime         @db.Time
   arrivalTime           DateTime         @db.Time
   selectedCar           String?          @db.VarChar(255)
-  isDefault             Boolean?
-  schedulePatternId     Int
-  schedulePreferencesId Int
+  isDefault             Boolean?         @default(true)
+  schedulePatternId     Int?
+  schedulePreferencesId Int?
   isActive              Boolean          @default(true)
   createdAt             DateTime         @default(now())
   updatedAt             DateTime         @updatedAt
   deletedAt             DateTime?
 
-  user               User               @relation(fields: [userId], references: [id])
-  schedulePattern    SchedulePattern    @relation(fields: [schedulePatternId], references: [id])
-  schedulePreference SchedulePreference @relation(fields: [schedulePreferencesId], references: [id])
+  user               User                @relation(fields: [userId], references: [id])
+  schedulePattern    SchedulePattern?    @relation(fields: [schedulePatternId], references: [id])
+  schedulePreference SchedulePreference? @relation(fields: [schedulePreferencesId], references: [id])
 
   matchedSchedules1 MatchedSchedules[] @relation("MatchedSchedulesRide1")
   matchedSchedules2 MatchedSchedules[] @relation("MatchedSchedulesRide2")

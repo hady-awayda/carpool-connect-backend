@@ -6,22 +6,45 @@
     <title>Socket.IO Test</title>
   </head>
   <body>
-    <h1>Socket.IO Test</h1>
+    <h1>Socket.IO Analytics Test</h1>
+
+    <!-- Create a div where the analytics data will be displayed -->
+    <div id="analyticsData">
+      <h2>Real-time Analytics Data:</h2>
+      <p>No data received yet.</p>
+    </div>
+
+    <!-- Load Socket.IO client library -->
     <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
     <script>
       const token =
         "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJuYW1lIjoiaGFkeSIsImVtYWlsIjoiaGFkeUBhZG1pbi5jb20iLCJyb2xlIjoiYWRtaW4ifSwiaWF0IjoxNzI2NjMzMzg4LCJleHAiOjE3ODk3NDg1ODh9.DsTIoBUBQtZwoKH0z0Z9i2bDCe1bgP6P9vUJ4sw1IJQ";
-      const socket = io("http://localhost:5000", {
-        auth: {
-          token: token,
-        },
-      });
+      const socket = io(
+        "ws://carpool-dev-load-balancer-854327849.eu-central-1.elb.amazonaws.com/socket.io/?EIO=4&transport=websocket/",
+        {
+          path: "/socket.io",
+          transports: ["websocket"],
+          auth: {
+            token: token,
+          },
+        }
+      );
+
+      // Function to update the analytics data in the HTML
+      const updateAnalyticsData = (data) => {
+        const analyticsDiv = document.getElementById("analyticsData");
+        analyticsDiv.innerHTML = `
+          <h2>Real-time Analytics Data:</h2>
+          <pre>${JSON.stringify(data, null, 2)}</pre>
+        `;
+      };
 
       socket.on("connect", () => {
         console.log("Connected to server");
 
         socket.on("analyticsData", (data) => {
           console.log("Received analytics data: ", data);
+          updateAnalyticsData(data); // Display the received data
         });
 
         socket.on("disconnect", () => {

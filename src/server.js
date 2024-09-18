@@ -15,6 +15,7 @@ const io = new Server(server, {
 });
 
 io.use((socket, next) => {
+  console.log("connecting");
   const token = socket.handshake.auth.token;
 
   if (!token) {
@@ -22,9 +23,9 @@ io.use((socket, next) => {
   }
 
   jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
-    if (err || decoded.role !== "admin")
+    if (err || decoded.user.role !== "admin")
       return next(new Error("Admin authorization required"));
-    socket.user = decoded;
+    socket.user = decoded.user;
     next();
   });
 });
@@ -35,7 +36,6 @@ io.on("connection", (socket) => {
   const emitAnalyticsData = async () => {
     try {
       const data = await analyticsService.getAnalyticsData();
-      console.log("Emitting Data!");
       socket.emit("analyticsData", data);
     } catch (error) {
       console.error("Error emitting analytics data:", error);

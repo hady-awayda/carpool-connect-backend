@@ -35,6 +35,7 @@ io.on("connection", (socket) => {
   const emitAnalyticsData = async () => {
     try {
       const data = await analyticsService.getAnalyticsData();
+      console.log("Emitting Data!");
       socket.emit("analyticsData", data);
     } catch (error) {
       console.error("Error emitting analytics data:", error);
@@ -43,7 +44,7 @@ io.on("connection", (socket) => {
 
   emitAnalyticsData();
 
-  const intervalId = setInterval(emitAnalyticsData, 10000);
+  const intervalId = setInterval(emitAnalyticsData, 1000);
 
   socket.on("disconnect", () => {
     clearInterval(intervalId);

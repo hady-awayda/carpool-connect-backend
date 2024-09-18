@@ -2,13 +2,13 @@ import prisma from "../../config/prisma_client.js";
 
 const MatchedScheduleRepository = {
   createMatchedSchedule: async (data) => {
-    return prisma.matchedSchedule.create({
+    return prisma.matchedSchedules.create({
       data,
     });
   },
 
   getMatchedSchedulesByUserId: async (userId) => {
-    return prisma.matchedSchedule.findMany({
+    return prisma.matchedSchedules.findMany({
       where: {
         deletedAt: null,
         OR: [
@@ -24,7 +24,7 @@ const MatchedScheduleRepository = {
   },
 
   updateMatchedScheduleStatus: async (id, user1Status, user2Status) => {
-    return prisma.matchedSchedule.update({
+    return prisma.matchedSchedules.update({
       where: { id, deletedAt: null },
       data: {
         user1AgreementStatus: user1Status,
@@ -34,7 +34,7 @@ const MatchedScheduleRepository = {
   },
 
   softDeleteMatchedSchedule: async (id) => {
-    return prisma.matchedSchedule.update({
+    return prisma.matchedSchedules.update({
       where: { id },
       data: {
         deletedAt: new Date(),

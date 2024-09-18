@@ -2,13 +2,13 @@ import prisma from "../../config/prisma_client.js";
 
 const UserScheduleRepository = {
   createUserSchedule: async (data) => {
-    return prisma.userSchedule.create({
+    return prisma.userSchedules.create({
       data,
     });
   },
 
   getUserSchedulesByUserId: async (userId) => {
-    return prisma.userSchedule.findMany({
+    return prisma.userSchedules.findMany({
       where: { userId, deletedAt: null },
       include: {
         schedulePreferences: true,
@@ -18,14 +18,14 @@ const UserScheduleRepository = {
   },
 
   updateUserSchedule: async (id, data) => {
-    return prisma.userSchedule.update({
+    return prisma.userSchedules.update({
       where: { id, deletedAt: null },
       data: { ...data },
     });
   },
 
   softDeleteUserSchedule: async (id) => {
-    return prisma.userSchedule.update({
+    return prisma.userSchedules.update({
       where: { id },
       data: {
         deletedAt: new Date(),

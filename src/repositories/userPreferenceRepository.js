@@ -2,7 +2,7 @@ import prisma from "../../config/prisma_client.js";
 
 const userPreferenceRepository = {
   createUserPreference: async (userId, data) => {
-    return prisma.userPreference.create({
+    return prisma.userPreferences.create({
       data: {
         userId,
         ...data,
@@ -11,20 +11,20 @@ const userPreferenceRepository = {
   },
 
   getUserPreference: async (userId) => {
-    return prisma.userPreference.findUnique({
+    return prisma.userPreferences.findUnique({
       where: { userId, deletedAt: null },
     });
   },
 
   updateUserPreference: async (userId, data) => {
-    return prisma.userPreference.update({
+    return prisma.userPreferences.update({
       where: { userId, deletedAt: null },
       data,
     });
   },
 
   deleteUserPreference: async (userId) => {
-    return prisma.userPreference.update({
+    return prisma.userPreferences.update({
       where: { userId, deletedAt: null },
       data: { deletedAt: new Date() },
     });

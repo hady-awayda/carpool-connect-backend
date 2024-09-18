@@ -10,20 +10,16 @@ router.post(
   UserPreferenceController.createUserPreference
 );
 
-router.get(
-  "/:id",
-  userAuthorization,
-  UserPreferenceController.getUserPreference
-);
+router.get("/", userAuthorization, UserPreferenceController.getUserPreference);
 
 router.put(
-  "/:id",
+  "/",
   userAuthorization,
   UserPreferenceController.updateUserPreference
 );
 
 router.delete(
-  "/:id",
+  "/",
   userAuthorization,
   UserPreferenceController.deleteUserPreference
 );

@@ -1,7 +1,8 @@
 import express from "express";
 // import userAuth from "../middleware/userAuthorization.js";
-// import adminAuth from "../middleware/adminAuthorization.js";
+import adminAuthorization from "../middleware/adminAuthorization.js";
 import UserController from "../controllers/userController.js";
+import userAuthorization from "../middleware/userAuthorization.js";
 // import { setUpdatedBy, setDeletedBy } from "../middleware/trackChanges.js";
 
 const router = express.Router();
@@ -38,7 +39,7 @@ const router = express.Router();
  *               items:
  *                 $ref: '#/components/schemas/User'
  */
-router.get("/all", UserController.getUsers);
+router.get("/all", adminAuthorization, UserController.getUsers);
 /**
  * @swagger
  * /api/users/{id}:
@@ -62,9 +63,9 @@ router.get("/all", UserController.getUsers);
  *       404:
  *         description: User not found
  */
-router.get("/:id", UserController.getUser);
-router.put("/:id", UserController.updateUser);
-router.delete("/:id", UserController.deleteUser);
+router.get("/", userAuthorization, UserController.getUser);
+router.put("/", userAuthorization, UserController.updateUser);
+router.delete("/", userAuthorization, UserController.deleteUser);
 
 // User Routes v2
 // router.get("/", authentication, adminAuth, UserController.getUsers);

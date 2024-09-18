@@ -20,7 +20,7 @@ router.put(
 router.put(
   "/preferences/:id",
   userAuthorization,
-  UserScheduleController.updateUserPreferences
+  UserScheduleController.updateSchedulePreferences
 );
 
 router.delete(

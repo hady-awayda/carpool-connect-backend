@@ -6,11 +6,7 @@ const router = express.Router();
 
 router.post("", userAuthorization, SchedulePatternController.create);
 router.get("/:id", userAuthorization, SchedulePatternController.getById);
-router.get(
-  "/user/",
-  userAuthorization,
-  SchedulePatternController.getByUserId
-);
+router.get("/", userAuthorization, SchedulePatternController.getByUserId);
 router.put("/:id", userAuthorization, SchedulePatternController.update);
 router.delete("/:id", userAuthorization, SchedulePatternController.delete);
 

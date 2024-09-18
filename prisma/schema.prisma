@@ -50,7 +50,8 @@ enum RideAgreementsStatusEnum {
   rejected
 }
 
-// Modelsmodel User {
+// Models
+model User {
   id           Int           @id @default(autoincrement())
   name         String        @db.VarChar(255)
   email        String        @unique @db.VarChar(255)
@@ -214,6 +215,8 @@ model UserPreferences {
   createdBy     User?         @relation("UserPreferencesCreatedBy", fields: [createdById], references: [id])
   updatedBy     User?         @relation("UserPreferencesUpdatedBy", fields: [updatedById], references: [id])
   deletedBy     User?         @relation("UserPreferencesDeletedBy", fields: [deletedById], references: [id])
+
+  @@unique([userId], name: "unique_user_preferences")
 }
 
 model UserInformation {
@@ -287,6 +290,26 @@ model ContactInformation {
   createdBy    User?         @relation("ContactInformationCreatedBy", fields: [createdById], references: [id])
   updatedBy    User?         @relation("ContactInformationUpdatedBy", fields: [updatedById], references: [id])
   deletedBy    User?         @relation("ContactInformationDeletedBy", fields: [deletedById], references: [id])
+}
+
+model UserAddress {
+  id           Int       @id @default(autoincrement())
+  userId       Int       @unique
+  phoneNumber  String?   @db.VarChar(255)
+  contactInfo  Int
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  deletedAt    DateTime?
+  createdById  Int?
+  updatedById  Int?
+  deletedById  Int?
+
+  // Relationships
+  user         User          @relation(fields: [userId], references: [id])
+
+  createdBy    User?         @relation("UserAddressCreatedBy", fields: [createdById], references: [id])
+  updatedBy    User?         @relation("UserAddressUpdatedBy", fields: [updatedById], references: [id])
+  deletedBy    User?         @relation("UserAddressDeletedBy", fields: [deletedById], references: [id])
 }
 
 model CarInformation {
@@ -402,4 +425,3 @@ model ScheduleAgreement {
   updatedBy      User?           @relation("ScheduleAgreementUpdatedBy", fields: [updatedById], references: [id])
   deletedBy      User?           @relation("ScheduleAgreementDeletedBy", fields: [deletedById], references: [id])
 }
-

@@ -11,7 +11,7 @@ router.put("/schedule/:id", UserScheduleController.updateUserSchedule);
 router.put("/preferences/:id", UserScheduleController.updateUserPreferences);
 
 router.delete(
-  "/:userScheduleId/:userPreferencesId",
+  "/:userScheduleId/:schedulePreferencesId",
   UserScheduleController.softDeleteUserScheduleAndPreferences
 );
 

@@ -1,51 +1,51 @@
 import express from "express";
 import ConversationController from "../controllers/conversationController.js";
-import authentication from "../middlewares/authentication.js";
+import userAuthorization from "../middleware/userAuthorization.js";
 
 const router = express.Router();
 
 router.post(
   "/createConversation",
-  authentication,
+  userAuthorization,
   ConversationController.createConversation
 );
 
 router.get(
   "/findConversation/:userId2",
-  authentication,
+  userAuthorization,
   ConversationController.findConversationByUserIds
 );
 
 router.get(
   "/userConversations",
-  authentication,
+  userAuthorization,
   ConversationController.getUserConversations
 );
 
 router.get(
   "/getConversations/:conversationId",
-  authentication,
+  userAuthorization,
   ConversationController.getConversationById
 );
 
 router.post(
   "/sendMessage/:conversationId",
-  authentication,
+  userAuthorization,
   ConversationController.sendMessage
 );
 router.get(
   "/getMessages/:conversationId",
-  authentication,
+  userAuthorization,
   ConversationController.getMessagesByConversationId
 );
 router.delete(
   "/deleteMessage/:messageId",
-  authentication,
+  userAuthorization,
   ConversationController.softDeleteMessage
 );
 router.delete(
   "/deleteConversation/:conversationId",
-  authentication,
+  userAuthorization,
   ConversationController.softDeleteConversation
 );
 

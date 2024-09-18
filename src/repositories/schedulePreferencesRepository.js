@@ -30,4 +30,4 @@ const SchedulePreferencesRepository = {
   },
 };
 
-export default UserPreferencesRepository;
+export default SchedulePreferencesRepository;

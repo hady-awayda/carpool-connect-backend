@@ -42,16 +42,16 @@ const UserScheduleController = {
     }
   },
 
-  updateUserPreferences: async (req, res) => {
+  updateSchedulePreferences: async (req, res) => {
     const { id } = req.params;
     const { preferencesData } = req.body;
     try {
-      const updatedUserPreferences =
-        await UserScheduleService.updateUserPreferences(
+      const updatedSchedulePreferences =
+        await UserScheduleService.updateSchedulePreferences(
           parseInt(id),
           preferencesData
         );
-      res.status(200).json(updatedUserPreferences);
+      res.status(200).json(updatedSchedulePreferences);
     } catch (error) {
       res.status(400).json({ message: error.message });
     }
@@ -59,11 +59,11 @@ const UserScheduleController = {
 
   // Soft delete a user schedule and its preferences
   softDeleteUserScheduleAndPreferences: async (req, res) => {
-    const { userScheduleId, userPreferencesId } = req.params;
+    const { userScheduleId, schedulePreferencesId } = req.params;
     try {
       await UserScheduleService.softDeleteUserScheduleAndPreferences(
         parseInt(userScheduleId),
-        parseInt(userPreferencesId)
+        parseInt(schedulePreferencesId)
       );
       res
         .status(200)

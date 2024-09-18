@@ -1,11 +1,24 @@
 import express from "express";
 import MatchedScheduleController from "../controllers/matchedScheduleController.js";
+import userAuthorization from "../middleware/userAuthorization.js";
 
 const router = express.Router();
 
-router.post("/", MatchedScheduleController.createMatchedSchedule);
-router.get("/:userId", MatchedScheduleController.getMatchedSchedulesByUserId);
+router.post(
+  "/",
+  userAuthorization,
+  MatchedScheduleController.createMatchedSchedule
+);
+router.get(
+  "/:userId",
+  userAuthorization,
+  MatchedScheduleController.getMatchedSchedulesByUserId
+);
 
-router.delete("/:id", MatchedScheduleController.softDeleteMatchedSchedule);
+router.delete(
+  "/:id",
+  userAuthorization,
+  MatchedScheduleController.softDeleteMatchedSchedule
+);
 
 export default router;

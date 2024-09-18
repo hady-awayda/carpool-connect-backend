@@ -9,7 +9,7 @@ router.post(
   userAuthorization,
   UserMatchController.createMatchRequest
 );
-router.get("/:userId", userAuthorization, UserMatchController.getUserMatches);
+router.get("/", userAuthorization, UserMatchController.getUserMatches);
 router.put(
   "/:matchId/respond",
   userAuthorization,

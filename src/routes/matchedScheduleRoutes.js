@@ -9,8 +9,9 @@ router.post(
   userAuthorization,
   MatchedScheduleController.createMatchedSchedule
 );
+
 router.get(
-  "/:userId",
+  "/",
   userAuthorization,
   MatchedScheduleController.getMatchedSchedulesByUserId
 );

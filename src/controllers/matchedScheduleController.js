@@ -25,7 +25,8 @@ const MatchedScheduleController = {
   },
 
   getMatchedSchedulesByUserId: async (req, res) => {
-    const { userId } = req.params;
+    const { userId } = req.user.id;
+
     try {
       const matchedSchedules = await MatchedScheduleService.getMatchedSchedulesByUserId(
         parseInt(userId)
@@ -36,9 +37,9 @@ const MatchedScheduleController = {
     }
   },
 
-  // Soft delete a matched user
   softDeleteMatchedSchedule: async (req, res) => {
     const { id } = req.params;
+    
     try {
       await MatchedScheduleService.softDeleteMatchedSchedule(parseInt(id));
       res

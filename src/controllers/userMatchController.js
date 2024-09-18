@@ -2,7 +2,9 @@ import UserMatchService from "../services/userMatchService.js";
 
 const UserMatchController = {
   createMatchRequest: async (req, res) => {
-    const { userId1, userId2, requestedBy } = req.body;
+    const { userId1 } = req.user.id;
+    const { userId2, requestedBy } = req.body;
+
     try {
       const match = await UserMatchService.createMatchRequest(
         userId1,
@@ -16,7 +18,8 @@ const UserMatchController = {
   },
 
   getUserMatches: async (req, res) => {
-    const { userId } = req.params;
+    const { userId } = req.user.id;
+
     try {
       const matches = await UserMatchService.getUserMatches(parseInt(userId));
       res.status(200).json(matches);
@@ -28,6 +31,7 @@ const UserMatchController = {
   respondToMatchRequest: async (req, res) => {
     const { matchId } = req.params;
     const { status, responseBy } = req.body;
+
     try {
       const updatedMatch = await UserMatchService.respondToMatchRequest(
         parseInt(matchId),
@@ -42,6 +46,7 @@ const UserMatchController = {
 
   deleteMatchRequest: async (req, res) => {
     const { matchId } = req.params;
+
     try {
       await UserMatchService.deleteMatchRequest(parseInt(matchId));
       res.status(200).json({ message: "Match request deleted successfully" });

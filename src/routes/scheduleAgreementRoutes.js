@@ -15,7 +15,7 @@ router.put(
   ScheduleAgreementController.updateScheduleAgreement
 );
 router.delete(
-  "/:id/:userId",
+  "/:id",
   userAuthorization,
   ScheduleAgreementController.softDeleteScheduleAgreement
 );

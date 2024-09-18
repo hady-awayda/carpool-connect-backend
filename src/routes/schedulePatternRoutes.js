@@ -7,7 +7,7 @@ const router = express.Router();
 router.post("", userAuthorization, SchedulePatternController.create);
 router.get("/:id", userAuthorization, SchedulePatternController.getById);
 router.get(
-  "/user/:userId",
+  "/user/",
   userAuthorization,
   SchedulePatternController.getByUserId
 );

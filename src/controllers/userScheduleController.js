@@ -2,8 +2,9 @@ import UserScheduleService from "../services/userScheduleService.js";
 
 const UserScheduleController = {
   createUserSchedule: async (req, res) => {
-    const { userId } = req.body;
+    const { userId } = req.user.id;
     const { userScheduleData, preferencesData } = req.body;
+
     try {
       const newUserSchedule = await UserScheduleService.createUserSchedule(
         userId,
@@ -17,7 +18,8 @@ const UserScheduleController = {
   },
 
   getUserSchedulesByUserId: async (req, res) => {
-    const { userId } = req.params;
+    const { userId } = req.user.id;
+
     try {
       const userSchedules = await UserScheduleService.getUserSchedulesByUserId(
         parseInt(userId)
@@ -31,6 +33,7 @@ const UserScheduleController = {
   updateUserSchedule: async (req, res) => {
     const { id } = req.params;
     const { userScheduleData } = req.body;
+
     try {
       const updatedUserSchedule = await UserScheduleService.updateUserSchedule(
         parseInt(id),
@@ -45,6 +48,7 @@ const UserScheduleController = {
   updateSchedulePreferences: async (req, res) => {
     const { id } = req.params;
     const { preferencesData } = req.body;
+
     try {
       const updatedSchedulePreferences =
         await UserScheduleService.updateSchedulePreferences(
@@ -57,7 +61,6 @@ const UserScheduleController = {
     }
   },
 
-  // Soft delete a user schedule and its preferences
   softDeleteUserScheduleAndPreferences: async (req, res) => {
     const { userScheduleId, schedulePreferencesId } = req.params;
     try {
@@ -65,11 +68,9 @@ const UserScheduleController = {
         parseInt(userScheduleId),
         parseInt(schedulePreferencesId)
       );
-      res
-        .status(200)
-        .json({
-          message: "User schedule and preferences soft deleted successfully",
-        });
+      res.status(200).json({
+        message: "User schedule and preferences soft deleted successfully",
+      });
     } catch (error) {
       res.status(500).json({ message: error.message });
     }

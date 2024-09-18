@@ -2,13 +2,16 @@ import ScheduleAgreementService from "../services/scheduleAgreementService.js";
 
 const ScheduleAgreementController = {
   createScheduleAgreement: async (req, res) => {
-    const { matchedScheduleId, proposedBy, proposedData } = req.body;
+    const { proposedBy } = req.user.id;
+    const { matchedScheduleId, proposedData } = req.body;
+
     try {
-      const scheduleAgreement = await ScheduleAgreementService.createScheduleAgreement(
-        matchedScheduleId,
-        proposedBy,
-        proposedData
-      );
+      const scheduleAgreement =
+        await ScheduleAgreementService.createScheduleAgreement(
+          matchedScheduleId,
+          proposedBy,
+          proposedData
+        );
       res.status(201).json(scheduleAgreement);
     } catch (error) {
       res.status(400).json({ message: error.message });
@@ -17,13 +20,16 @@ const ScheduleAgreementController = {
 
   updateScheduleAgreement: async (req, res) => {
     const { id } = req.params;
-    const { data, userId } = req.body;
+    const { data } = req.body;
+    const { userId } = req.user.id;
+
     try {
-      const updatedAgreement = await ScheduleAgreementService.updateScheduleAgreement(
-        parseInt(id),
-        data,
-        userId
-      );
+      const updatedAgreement =
+        await ScheduleAgreementService.updateScheduleAgreement(
+          parseInt(id),
+          data,
+          userId
+        );
       res.status(200).json(updatedAgreement);
     } catch (error) {
       res.status(400).json({ message: error.message });
@@ -31,7 +37,9 @@ const ScheduleAgreementController = {
   },
 
   softDeleteScheduleAgreement: async (req, res) => {
-    const { id, userId } = req.params;
+    const { id } = req.params;
+    const { userId } = req.user.id;
+
     try {
       await ScheduleAgreementService.softDeleteScheduleAgreement(
         parseInt(id),

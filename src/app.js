@@ -5,7 +5,7 @@ import authRoutes from "./routes/authRoutes.js";
 import conversationRoutes from "./routes/conversationRoutes.js";
 import matchedScheduleRoutes from "./routes/matchedScheduleRoutes.js";
 import scheduleAgreementRoutes from "./routes/scheduleAgreementRoutes.js";
-import rideScheduleRoutes from "./routes/rideScheduleRoutes.js";
+import userScheduleRoutes from "./routes/userScheduleRoutes.js";
 import schedulePatternRoutes from "./routes/schedulePatternRoutes.js";
 import userMatchRoutes from "./routes/userMatchRoutes.js";
 import userPreferenceRoutes from "./routes/userPreferenceRoutes.js";
@@ -20,11 +20,11 @@ app.use(express.json());
 
 app.use("/api/auth", authRoutes);
 app.use("/api/conversations", conversationRoutes);
-app.use("/api/matched-schedules", matchedScheduleRoutes);
-app.use("/api/schedule-agreements", scheduleAgreementRoutes);
-app.use("/api/ride-schedules", rideScheduleRoutes);
-app.use("/api/schedule-patterns", schedulePatternRoutes);
-app.use("/api/user-matches", userMatchRoutes);
+app.use("/api/matchedSchedules", matchedScheduleRoutes);
+app.use("/api/scheduleAgreements", scheduleAgreementRoutes);
+app.use("/api/userSchedules", userScheduleRoutes);
+app.use("/api/schedulePatterns", schedulePatternRoutes);
+app.use("/api/userMatches", userMatchRoutes);
 app.use("/api/usersPreferences", userPreferenceRoutes);
 app.use("/api/users", userRoutes);
 

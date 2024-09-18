@@ -3,7 +3,7 @@ import express from "express";
 import setupSwaggerUI from "../config/swagger.js";
 import authRoutes from "./routes/authRoutes.js";
 import conversationRoutes from "./routes/conversationRoutes.js";
-import matchedRidesRoutes from "./routes/matchedRideRoutes.js";
+import matchedScheduleRoutes from "./routes/matchedScheduleRoutes.js";
 import rideAgreementRoutes from "./routes/rideAgreementRoutes.js";
 import rideScheduleRoutes from "./routes/rideScheduleRoutes.js";
 import schedulePatternRoutes from "./routes/schedulePatternRoutes.js";
@@ -20,7 +20,7 @@ app.use(express.json());
 
 app.use("/api/auth", authRoutes);
 app.use("/api/conversations", conversationRoutes);
-app.use("/api/matched-rides", matchedRidesRoutes);
+app.use("/api/matched-schedules", matchedScheduleRoutes);
 app.use("/api/ride-agreements", rideAgreementRoutes);
 app.use("/api/ride-schedules", rideScheduleRoutes);
 app.use("/api/schedule-patterns", schedulePatternRoutes);

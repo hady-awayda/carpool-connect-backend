@@ -3,13 +3,13 @@ import UserScheduleService from "../services/userScheduleService.js";
 const UserScheduleController = {
   createUserSchedule: async (req, res) => {
     const { userId } = req.user.id;
-    const { userScheduleData, preferencesData } = req.body;
+    const { userScheduleData } = req.body;
 
     try {
       const newUserSchedule = await UserScheduleService.createUserSchedule(
         userId,
-        userScheduleData,
-        preferencesData
+        userScheduleData
+        // preferencesData
       );
       res.status(201).json(newUserSchedule);
     } catch (error) {

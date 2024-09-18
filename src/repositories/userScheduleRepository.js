@@ -3,7 +3,21 @@ import prisma from "../../config/prisma_client.js";
 const UserScheduleRepository = {
   createUserSchedule: async (data) => {
     return prisma.userSchedules.create({
-      data,
+      data: {
+        userId: data.userId,
+        scheduleType: data.scheduleType,
+        departureLat: data.departureLat,
+        departureLng: data.departureLng,
+        destinationLat: data.destinationLat,
+        destinationLng: data.destinationLng,
+        departureTime: data.departureTime,
+        arrivalTime: data.arrivalTime,
+        selectedCar: data.selectedCar,
+        isDefault: data.isDefault,
+        schedulePatternId: data.schedulePatternId,
+        schedulePreferencesId: data.schedulePreferencesId,
+        isActive: data.isActive,
+      },
     });
   },
 

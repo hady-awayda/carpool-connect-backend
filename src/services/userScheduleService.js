@@ -2,16 +2,16 @@ import UserScheduleRepository from "../repositories/userScheduleRepository.js";
 import SchedulePreferencesRepository from "../repositories/schedulePreferencesRepository.js";
 
 const UserScheduleService = {
-  createUserSchedule: async (userId, userScheduleData, preferencesData) => {
-    const schedulePreferences =
-      await SchedulePreferencesRepository.createSchedulePreferences({
-        ...preferencesData,
-      });
+  createUserSchedule: async (userId, userScheduleData) => {
+    // const schedulePreferences =
+    // await SchedulePreferencesRepository.createSchedulePreferences({
+    //   ...preferencesData,
+    // });
 
     return await UserScheduleRepository.createUserSchedule({
-      ...userScheduleData,
       userId,
-      schedulePreferencesId: schedulePreferences.id,
+      ...userScheduleData,
+      // schedulePreferencesId: schedulePreferences.id,
     });
   },
 

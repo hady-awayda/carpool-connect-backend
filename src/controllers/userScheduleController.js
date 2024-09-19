@@ -2,8 +2,8 @@ import UserScheduleService from "../services/userScheduleService.js";
 
 const UserScheduleController = {
   createUserSchedule: async (req, res) => {
-    const { userId } = req.user.id;
-    const { userScheduleData } = req.body;
+    const userId = req.user.id;
+    const userScheduleData = req.body;
 
     try {
       const newUserSchedule = await UserScheduleService.createUserSchedule(

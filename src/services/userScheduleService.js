@@ -8,9 +8,11 @@ const UserScheduleService = {
     //   ...preferencesData,
     // });
 
-    return await UserScheduleRepository.createUserSchedule({
-      userId,
+    return await UserScheduleRepository.createUserSchedule(userId, {
       ...userScheduleData,
+      schedulePatternId: userScheduleData.schedulePatternId || null,
+      departureTime: new Date(userScheduleData.departureTime).toISOString(),
+      arrivalTime: new Date(userScheduleData.arrivalTime).toISOString(),
       // schedulePreferencesId: schedulePreferences.id,
     });
   },

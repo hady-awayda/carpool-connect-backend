@@ -2,8 +2,6 @@ import prisma from "../../config/prisma_client.js";
 
 const UserScheduleRepository = {
   createUserSchedule: async (userId, data) => {
-    console.log("userScheduleData", data);
-
     const createData = {
       user: {
         connect: { id: userId },
@@ -17,14 +15,18 @@ const UserScheduleRepository = {
       arrivalTime: data.arrivalTime,
       selectedCar: data.selectedCar,
       isDefault: data.isDefault,
-      schedulePreferencesId: data.schedulePreferencesId,
       isActive: data.isActive,
     };
 
-    // Explicitly handle schedulePattern
     if (data.schedulePatternId) {
       createData.schedulePattern = {
         connect: { id: data.schedulePatternId },
+      };
+    }
+
+    if (data.schedulePreferencesId) {
+      createData.schedulePreference = {
+        connect: { id: data.schedulePreferencesId },
       };
     }
 

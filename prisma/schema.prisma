@@ -128,7 +128,7 @@ model UserSchedules {
   departureTime         DateTime         @db.Time
   arrivalTime           DateTime         @db.Time
   selectedCar           String?          @db.VarChar(255)
-  isDefault             Boolean?         @default(true)
+  isDefault             Boolean         @default(true)
   schedulePatternId     Int?
   schedulePreferencesId Int?
   isActive              Boolean          @default(true)

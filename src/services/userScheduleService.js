@@ -1,6 +1,20 @@
 import UserScheduleRepository from "../repositories/userScheduleRepository.js";
 import SchedulePreferencesRepository from "../repositories/schedulePreferencesRepository.js";
 
+const handleScheduleRelations = (data) => {
+  const { schedulePatternId, schedulePreferencesId, ...restData } = data;
+  const relations = {};
+
+  if (schedulePatternId) {
+    relations.schedulePattern = { connect: { id: schedulePatternId } };
+  }
+  if (schedulePreferencesId) {
+    relations.schedulePreference = { connect: { id: schedulePreferencesId } };
+  }
+
+  return { ...restData, ...relations };
+};
+
 const UserScheduleService = {
   createUserSchedule: async (userId, userScheduleData) => {
     // const schedulePreferences =
@@ -8,13 +22,16 @@ const UserScheduleService = {
     //   ...preferencesData,
     // });
 
-    return await UserScheduleRepository.createUserSchedule(userId, {
+    const processedData = handleScheduleRelations({
       ...userScheduleData,
-      schedulePatternId: userScheduleData.schedulePatternId || null,
       departureTime: new Date(userScheduleData.departureTime).toISOString(),
       arrivalTime: new Date(userScheduleData.arrivalTime).toISOString(),
-      // schedulePreferencesId: schedulePreferences.id,
     });
+
+    return await UserScheduleRepository.createUserSchedule(
+      userId,
+      processedData
+    );
   },
 
   getUserSchedulesByUserId: async (userId) => {
@@ -36,10 +53,8 @@ const UserScheduleService = {
   },
 
   updateUserSchedule: async (id, userScheduleData) => {
-    return await UserScheduleRepository.updateUserSchedule(
-      id,
-      userScheduleData
-    );
+    const processedData = handleScheduleRelations(userScheduleData);
+    return await UserScheduleRepository.updateUserSchedule(id, processedData);
   },
 
   updateSchedulePreferences: async (id, preferencesData) => {

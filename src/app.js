@@ -11,6 +11,7 @@ import userMatchRoutes from "./routes/userMatchRoutes.js";
 import userPreferenceRoutes from "./routes/userPreferenceRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import analyticsRoutes from "./routes/analyticsRoutes.js";
+import cors from "cors";
 
 dotenv.config();
 
@@ -30,6 +31,13 @@ app.use((req, res, next) => {
   }
   next();
 });
+
+app.use(
+  cors({
+    origin: "*, exp://10.18.200.185:8081",
+    credentials: true,
+  })
+);
 
 app.use("/api/auth", authRoutes);
 app.use("/api/conversations", conversationRoutes);

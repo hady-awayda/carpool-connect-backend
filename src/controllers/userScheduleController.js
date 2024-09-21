@@ -18,7 +18,7 @@ const UserScheduleController = {
   },
 
   getUserSchedulesByUserId: async (req, res) => {
-    const { userId } = req.user.id;
+    const userId = req.user.id;
 
     try {
       const userSchedules = await UserScheduleService.getUserSchedulesByUserId(

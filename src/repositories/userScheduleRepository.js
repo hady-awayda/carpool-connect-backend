@@ -14,7 +14,7 @@ const UserScheduleRepository = {
     return prisma.userSchedules.findMany({
       where: { userId, deletedAt: null },
       include: {
-        schedulePreferences: true,
+        schedulePreference: true,
         schedulePattern: true,
       },
     });

@@ -33,12 +33,12 @@ app.use((req, res, next) => {
 
 app.use("/api/auth", authRoutes);
 app.use("/api/conversations", conversationRoutes);
-app.use("/api/matchedSchedules", matchedScheduleRoutes);
-app.use("/api/scheduleAgreements", scheduleAgreementRoutes);
-app.use("/api/userSchedules", userScheduleRoutes);
-app.use("/api/schedulePatterns", schedulePatternRoutes);
-app.use("/api/userMatches", userMatchRoutes);
-app.use("/api/usersPreferences", userPreferenceRoutes);
+app.use("/api/matched-schedules", matchedScheduleRoutes);
+app.use("/api/schedule-agreements", scheduleAgreementRoutes);
+app.use("/api/user-schedules", userScheduleRoutes);
+app.use("/api/schedule-patterns", schedulePatternRoutes);
+app.use("/api/usermatches", userMatchRoutes);
+app.use("/api/users-preferences", userPreferenceRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api", analyticsRoutes);
 

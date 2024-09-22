@@ -123,14 +123,14 @@ model UserSchedules {
   scheduleType          ScheduleTypeEnum @default(rider)
   departureName         String           @db.VarChar(255)
   departureTime         DateTime         @db.Time
-  destinationName       String           @db.VarChar(255)  
+  destinationName       String           @db.VarChar(255)
   arrivalTime           DateTime         @db.Time
   departureLat          Decimal          @db.Decimal(10, 7)
   departureLng          Decimal          @db.Decimal(10, 7)
   destinationLat        Decimal          @db.Decimal(10, 7)
   destinationLng        Decimal          @db.Decimal(10, 7)
   selectedCar           String?          @db.VarChar(255)
-  isDefault             Boolean         @default(true)
+  isDefault             Boolean          @default(true)
   schedulePatternId     Int?
   schedulePreferencesId Int?
   isActive              Boolean          @default(true)

@@ -4,6 +4,7 @@ const UserScheduleController = {
   createUserSchedule: async (req, res) => {
     const userId = req.user.id;
     const userScheduleData = req.body;
+    console.log(req.body);
 
     try {
       const newUserSchedule = await UserScheduleService.createUserSchedule(

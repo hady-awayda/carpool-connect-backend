@@ -4,10 +4,6 @@ import userAuthorization from "../middleware/userAuthorization.js";
 
 const router = express.Router();
 
-router.get(
-  "/find-schedules",
-  userAuthorization,
-  ScheduleController.findSchedules
-);
+router.get("/", userAuthorization, ScheduleController.findSchedules);
 
 export default router;

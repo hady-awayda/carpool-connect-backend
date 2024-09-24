@@ -1,8 +1,9 @@
 import prisma from "../../config/prisma_client.js";
 
 const ScheduleRepository = {
-  findSchedulesWithinBounds: async (
+  findSchedulesWithinBoundsAndType: async (
     userId,
+    scheduleType,
     departureBounds,
     destinationBounds
   ) => {
@@ -10,6 +11,8 @@ const ScheduleRepository = {
       where: {
         userId: { not: userId },
         deletedAt: null,
+        isActive: true,
+        scheduleType,
         departureLat: {
           gte: departureBounds.minLat,
           lte: departureBounds.maxLat,
@@ -26,7 +29,6 @@ const ScheduleRepository = {
           gte: destinationBounds.minLng,
           lte: destinationBounds.maxLng,
         },
-        isActive: true,
       },
     });
   },

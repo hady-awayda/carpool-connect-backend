@@ -15,14 +15,11 @@ const ScheduleService = {
     destinationTimeFlexibility,
     destinationDistanceFlexibility
   ) => {
-    // Step 1: Get the user's specific schedule by scheduleId, or get the default one if not provided
     let userSchedule;
 
     if (scheduleId) {
-      // Get schedule by ID if provided
       userSchedule = await userScheduleService.getUserScheduleById(scheduleId);
     } else {
-      // Fetch the default schedule if no scheduleId is provided
       userSchedule = await userScheduleService.getDefaultUserSchedule(userId);
     }
 
@@ -30,7 +27,8 @@ const ScheduleService = {
       throw new Error("User schedule not found.");
     }
 
-    // Step 2: Pre-calculate lat/lng bounds for the flexible proximity
+    console.log("Step 1 done:", userSchedule);
+
     const departureBounds = calculateLatLngBounds(
       userSchedule.departureLat,
       userSchedule.departureLng,
@@ -42,17 +40,42 @@ const ScheduleService = {
       destinationDistanceFlexibility
     );
 
-    // Step 3: Fetch schedules within the bounds (departure + destination filtering)
+    // console.log("Step 2 done:", departureBounds, destinationBounds);
+
+    let scheduleTypeToSearch;
+
+    switch (userSchedule.scheduleType) {
+      case "passenger":
+        scheduleTypeToSearch = "rider";
+        break;
+      case "rider":
+        scheduleTypeToSearch = "passenger";
+        break;
+      case "partnership":
+        scheduleTypeToSearch = "partnership";
+        break;
+      default:
+        throw new Error("Unsupported schedule type");
+    }
+
+    // Step 4: Fetch schedules within the bounds and matching the schedule type (departure + destination filtering)
     const candidateSchedules =
-      await ScheduleRepository.findSchedulesWithinBounds(
+      await ScheduleRepository.findSchedulesWithinBoundsAndType(
         userId,
+        scheduleTypeToSearch,
         departureBounds,
         destinationBounds
       );
 
+    console.log(
+      "Step 4 done:",
+      candidateSchedules.filter((s) => s.scheduleType === scheduleTypeToSearch)
+        .length
+    );
+
     let matchedSchedules = [];
 
-    // Step 4: Process each candidate schedule
+    // Step 5: Process each candidate schedule
     for (const schedule of candidateSchedules) {
       const departureTimeMatch =
         calculateTimeDifference(
@@ -65,7 +88,18 @@ const ScheduleService = {
           schedule.arrivalTime
         ) <= destinationTimeFlexibility;
 
+      console.log(
+        calculateTimeDifference(
+          userSchedule.departureTime,
+          schedule.departureTime
+        ),
+        departureTimeFlexibility,
+        calculateTimeDifference(userSchedule.arrivalTime, schedule.arrivalTime),
+        destinationTimeFlexibility
+      );
+
       if (departureTimeMatch && destinationTimeMatch) {
+        console.log(schedule);
         const routeOverlap = await getGoogleDirections(
           userSchedule.departureLat,
           userSchedule.departureLng,
@@ -86,7 +120,9 @@ const ScheduleService = {
       }
     }
 
-    // Step 5: Sort the schedules based on overlap score and time proximity
+    console.log("Step 5 done:", matchedSchedules.length);
+
+    // Step 6: Sort the schedules based on overlap score and time proximity
     matchedSchedules.sort((a, b) => {
       if (a.overlapScore === b.overlapScore) {
         const timeDiffA = calculateTimeDifference(
@@ -102,7 +138,9 @@ const ScheduleService = {
       return b.overlapScore - a.overlapScore; // Higher overlap score first
     });
 
-    // Step 6: Return the top 10 best matches
+    // console.log("Step 6 done:", matchedSchedules);
+
+    // Step 7: Return the top 10 best matches
     return matchedSchedules.slice(0, 10);
   },
 };

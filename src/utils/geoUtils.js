@@ -1,34 +1,41 @@
 const EARTH_RADIUS_KM = 6371;
 
 export const calculateLatLngBounds = (lat, lng, distanceKm = 30) => {
-  const latChange = (distanceKm / EARTH_RADIUS_KM) * (180 / Math.PI); // Approx change in lat
+  const numLat = Number(lat);
+  const numLng = Number(lng);
+
+  if (isNaN(numLat) || isNaN(numLng)) {
+    throw new Error(
+      "Invalid latitude or longitude. Please provide numeric values."
+    );
+  }
+
+  const latChange = (distanceKm / EARTH_RADIUS_KM) * (180 / Math.PI);
   const lngChange =
-    (distanceKm / (EARTH_RADIUS_KM * Math.cos((lat * Math.PI) / 180))) *
-    (180 / Math.PI); // Approx change in lng
+    (distanceKm / (EARTH_RADIUS_KM * Math.cos((numLat * Math.PI) / 180))) *
+    (180 / Math.PI);
 
-  const minLat = lat - latChange;
-  const maxLat = lat + latChange;
-  const minLng = lng - lngChange;
-  const maxLng = lng + lngChange;
+  const minLat = numLat - latChange;
+  const maxLat = numLat + latChange;
+  const minLng = numLng - lngChange;
+  const maxLng = numLng + lngChange;
 
-  return { minLat, maxLat, minLng, maxLng };
-};
-
-export const calculateProximity = (lat1, lon1, lat2, lon2) => {
-  const dLat = ((lat2 - lat1) * Math.PI) / 180;
-  const dLon = ((lon2 - lon1) * Math.PI) / 180;
-  const a =
-    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-    Math.cos((lat1 * Math.PI) / 180) *
-      Math.cos((lat2 * Math.PI) / 180) *
-      Math.sin(dLon / 2) *
-      Math.sin(dLon / 2);
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-  const distance = EARTH_RADIUS_KM * c;
-  return distance;
+  return {
+    minLat: Number(minLat.toFixed(8)),
+    maxLat: Number(maxLat.toFixed(8)),
+    minLng: Number(minLng.toFixed(8)),
+    maxLng: Number(maxLng.toFixed(8)),
+  };
 };
 
 export const calculateTimeDifference = (time1, time2) => {
-  const differenceInMs = new Date(time2) - new Date(time1);
+  const date1 = new Date(time1);
+  const date2 = new Date(time2);
+
+  if (isNaN(date1.getTime()) || isNaN(date2.getTime())) {
+    throw new Error("Invalid date format. Please provide valid date strings.");
+  }
+
+  const differenceInMs = date2 - date1;
   return Math.abs(differenceInMs / (1000 * 60));
 };

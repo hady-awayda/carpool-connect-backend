@@ -6,8 +6,8 @@ const ScheduleController = {
     const {
       scheduleId,
       departureTimeFlexibility = 30,
-      departureDistanceFlexibility = 30,
       destinationTimeFlexibility = 30,
+      departureDistanceFlexibility = 30,
       destinationDistanceFlexibility = 30,
     } = req.query;
 

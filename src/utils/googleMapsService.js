@@ -1,6 +1,6 @@
 import axios from "axios";
-import { frechetDistance } from "frechet";
-import { dtwDistance } from "dtw";
+import frechetDistance from "frechet";
+import dtwDistance from "dtw";
 
 export const getGoogleDirections = async (
   originLat1,

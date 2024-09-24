@@ -17,6 +17,8 @@ const handleScheduleRelations = (data) => {
 
 const UserScheduleService = {
   createUserSchedule: async (userId, userScheduleData) => {
+    await UserScheduleRepository.unsetDefaultSchedules(userId);
+
     // const schedulePreferences =
     // await SchedulePreferencesRepository.createSchedulePreferences({
     //   ...preferencesData,
@@ -61,9 +63,26 @@ const UserScheduleService = {
     return await UserScheduleRepository.getDefaultUserSchedule(userId);
   },
 
+  setDefaultSchedule: async (userId, scheduleId) => {
+    await UserScheduleRepository.unsetDefaultSchedules(userId);
+
+    return await UserScheduleRepository.setDefaultSchedule(userId, scheduleId);
+  },
+
+  updateSchedulePreferences: async (id, preferencesData) => {
+    return await SchedulePreferencesRepository.updateSchedulePreferences(
+      id,
+      preferencesData
+    );
+  },
+
   updateUserSchedule: async (id, userScheduleData) => {
     const processedData = handleScheduleRelations(userScheduleData);
-    return await UserScheduleRepository.updateUserSchedule(id, processedData);
+    return await UserScheduleRepository.updateUserSchedule(
+      userId,
+      id,
+      processedData
+    );
   },
 
   updateSchedulePreferences: async (id, preferencesData) => {

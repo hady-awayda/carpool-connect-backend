@@ -10,9 +10,10 @@ export const calculateLatLngBounds = (lat, lng, distanceKm = 30) => {
     );
   }
 
-  const latChange = (distanceKm / EARTH_RADIUS_KM) * (180 / Math.PI);
+  const latChange = (distanceKm + 0.01 / EARTH_RADIUS_KM) * (180 / Math.PI);
   const lngChange =
-    (distanceKm / (EARTH_RADIUS_KM * Math.cos((numLat * Math.PI) / 180))) *
+    (distanceKm +
+      0.01 / (EARTH_RADIUS_KM * Math.cos((numLat * Math.PI) / 180))) *
     (180 / Math.PI);
 
   const minLat = numLat - latChange;

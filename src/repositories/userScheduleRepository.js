@@ -44,9 +44,38 @@ const UserScheduleRepository = {
     });
   },
 
-  updateUserSchedule: async (id, data) => {
+  unsetDefaultSchedules: async (userId) => {
+    return prisma.userSchedules.updateMany({
+      where: {
+        userId,
+        deletedAt: null,
+      },
+      data: {
+        isDefault: false,
+      },
+    });
+  },
+
+  setDefaultSchedule: async (userId, scheduleId) => {
     return prisma.userSchedules.update({
-      where: { id, deletedAt: null },
+      where: {
+        userId,
+        id: scheduleId,
+        deletedAt: null,
+      },
+      data: {
+        isDefault: true,
+      },
+    });
+  },
+
+  updateUserSchedule: async (userId, id, data) => {
+    return prisma.userSchedules.update({
+      where: {
+        userId,
+        id,
+        deletedAt: null,
+      },
       data: { ...data },
     });
   },

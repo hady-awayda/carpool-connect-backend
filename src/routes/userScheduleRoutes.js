@@ -17,10 +17,17 @@ router.put(
   userAuthorization,
   UserScheduleController.updateUserSchedule
 );
+
 router.put(
   "/preferences/:id",
   userAuthorization,
   UserScheduleController.updateSchedulePreferences
+);
+
+router.patch(
+  "/set-default/:scheduleId",
+  userAuthorization,
+  UserScheduleController.setDefaultSchedule
 );
 
 router.delete(

@@ -4,7 +4,6 @@ const UserScheduleController = {
   createUserSchedule: async (req, res) => {
     const userId = req.user.id;
     const userScheduleData = req.body;
-    console.log(req.body);
 
     try {
       const newUserSchedule = await UserScheduleService.createUserSchedule(
@@ -28,6 +27,24 @@ const UserScheduleController = {
       res.status(200).json(userSchedules);
     } catch (error) {
       res.status(500).json({ message: error.message });
+    }
+  },
+
+  setDefaultSchedule: async (req, res) => {
+    const userId = req.user.id;
+    const { scheduleId } = req.params;
+
+    try {
+      const updatedSchedule = await UserScheduleService.setDefaultSchedule(
+        userId,
+        parseInt(scheduleId)
+      );
+      res.status(200).json({
+        message: "Default schedule updated successfully",
+        schedule: updatedSchedule,
+      });
+    } catch (error) {
+      res.status(400).json({ message: error.message });
     }
   },
 

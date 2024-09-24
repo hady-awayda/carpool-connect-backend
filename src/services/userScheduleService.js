@@ -53,6 +53,14 @@ const UserScheduleService = {
     return userSchedules;
   },
 
+  getUserScheduleById: async (scheduleId) => {
+    return await UserScheduleRepository.getUserScheduleById(scheduleId);
+  },
+
+  getDefaultUserSchedule: async (userId) => {
+    return await UserScheduleRepository.getDefaultUserSchedule(userId);
+  },
+
   updateUserSchedule: async (id, userScheduleData) => {
     const processedData = handleScheduleRelations(userScheduleData);
     return await UserScheduleRepository.updateUserSchedule(id, processedData);

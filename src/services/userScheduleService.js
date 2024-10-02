@@ -39,17 +39,18 @@ const UserScheduleService = {
       userId
     );
 
-    const userSchedulesWithPreferences = await Promise.all(
-      userSchedules.map(async (userSchedule) => {
-        const schedulePreferences =
-          await SchedulePreferencesRepository.getSchedulePreferencesByUserScheduleId(
-            userSchedule.schedulePreferencesId
-          );
-        return { ...userSchedule, schedulePreferences };
-      })
-    );
+    // const userSchedulesWithPreferences = await Promise.all(
+    //   userSchedules.map(async (userSchedule) => {
+    //     const schedulePreferences =
+    //       await SchedulePreferencesRepository.getSchedulePreferencesByUserScheduleId(
+    //         userSchedule.schedulePreferencesId
+    //       );
+    //     return { ...userSchedule, schedulePreferences };
+    //   })
+    // );
 
-    return userSchedulesWithPreferences;
+    // return userSchedulesWithPreferences;
+    return userSchedules;
   },
 
   updateUserSchedule: async (id, userScheduleData) => {

@@ -3,6 +3,7 @@ import ScheduleService from "../services/scheduleService.js";
 const ScheduleController = {
   findSchedules: async (req, res) => {
     const userId = req.user.id;
+
     const {
       scheduleId,
       departureTimeFlexibility = 30,
@@ -20,6 +21,7 @@ const ScheduleController = {
         parseInt(destinationTimeFlexibility),
         parseInt(destinationDistanceFlexibility)
       );
+      
       res.status(200).json(schedules);
     } catch (error) {
       res.status(500).json({ message: error.message });

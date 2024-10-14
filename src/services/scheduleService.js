@@ -15,7 +15,7 @@ const ScheduleService = {
     destinationTimeFlexibility,
     destinationDistanceFlexibility
   ) => {
-    let userSchedule;
+    let userSchedule, scheduleTypeToSearch;
 
     if (scheduleId) {
       userSchedule = await userScheduleService.getUserScheduleById(scheduleId);
@@ -37,8 +37,6 @@ const ScheduleService = {
       userSchedule.destinationLng,
       destinationDistanceFlexibility
     );
-
-    let scheduleTypeToSearch;
 
     switch (userSchedule.scheduleType) {
       case "passenger":

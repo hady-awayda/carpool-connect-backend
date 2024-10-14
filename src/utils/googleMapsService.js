@@ -9,6 +9,7 @@ const resamplePolyline = (polyline, numPoints) => {
   for (let i = 0; i < numPoints; i++) {
     const idx = Math.floor(i * step);
     const t = i * step - idx;
+
     if (idx >= polyline.length - 1) {
       resampled.push(polyline[polyline.length - 1]);
     } else {
@@ -60,6 +61,24 @@ export const getGoogleDirections = async (
       axios.get(directionsUrl2),
     ]);
 
+    if (route1Response.data.status !== "OK") {
+      console.error(
+        "Error fetching route 1:",
+        route1Response.data.status,
+        route1Response.data.error_message
+      );
+      return null;
+    }
+
+    if (route2Response.data.status !== "OK") {
+      console.error(
+        "Error fetching route 2:",
+        route2Response.data.status,
+        route2Response.data.error_message
+      );
+      return null;
+    }
+
     const route1 = route1Response.data.routes[0].overview_polyline.points;
     const route2 = route2Response.data.routes[0].overview_polyline.points;
 
@@ -81,6 +100,7 @@ export const getGoogleDirections = async (
     return { frechetScore };
   } catch (error) {
     console.error("Google Maps API error:", error);
+
     return null;
   }
 };
@@ -90,6 +110,7 @@ const decodePolyline = (encoded) => {
     lat = 0,
     lng = 0,
     coordinates = [];
+
   while (index < encoded.length) {
     let b,
       shift = 0,
@@ -114,5 +135,6 @@ const decodePolyline = (encoded) => {
 
     coordinates.push([lat / 1e5, lng / 1e5]);
   }
+
   return coordinates;
 };

@@ -47,7 +47,7 @@ app.use("/api/users", userRoutes);
 setupSwaggerUI(app);
 
 app.get("/health", (req, res) => {
-  res.status(200).send("OK");
+  res.status(200).send("OKi");
 });
 
 export default app;

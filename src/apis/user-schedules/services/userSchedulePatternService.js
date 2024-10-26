@@ -1,4 +1,4 @@
-import SchedulePatternRepository from "../repositories/schedulePatternRepository.js";
+import SchedulePatternRepository from "../repositories/userSchedulePatternRepository.js";
 
 const SchedulePatternService = {
   createSchedulePattern: async (userId, data) => {

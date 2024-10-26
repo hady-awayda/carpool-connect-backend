@@ -2,8 +2,8 @@ import ScheduleRepository from "../../../repositories/scheduleRepository.js";
 import {
   calculateLatLngBounds,
   calculateTimeDifference,
-} from "../../../utils/geoUtils.js";
-import { getGoogleDirections } from "../../../utils/googleMapsService.js";
+} from "../../utils/geoUtils.js";
+import { getGoogleDirections } from "../../utils/googleMapsService.js";
 import userScheduleService from "./userScheduleService.js";
 
 const ScheduleService = {

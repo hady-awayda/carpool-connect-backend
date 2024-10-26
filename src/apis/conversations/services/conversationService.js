@@ -1,4 +1,4 @@
-import ConversationRepository from "../../../repositories/conversationRepository.js";
+import ConversationRepository from "../conversationRepository.js";
 import MessageRepository from "../../../repositories/messageRepository.js";
 
 const ConversationService = {

@@ -11,7 +11,7 @@ import userMatchRoutes from "./routes/userMatchRouter.js";
 import userPreferenceRoutes from "./routes/userPreferenceRoutes.js";
 import userRoutes from "./apis/users/userRoutes.js";
 import analyticsRoutes from "./apis/analytics/analyticsRoutes.js";
-import findSchedulesRoutes from "./apis/schedule-search/findSchedulesRoutes.js";
+import findSchedulesRoutes from "./apis/find-schedules/findSchedulesRoutes.js";
 
 dotenv.config();
 

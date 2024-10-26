@@ -2,7 +2,7 @@ import http from "http";
 import { Server } from "socket.io";
 import app from "./app.js";
 import jwt from "jsonwebtoken";
-import analyticsService from "./services/analyticsService.js";
+import analyticsService from "./apis/analytics/services/analyticsService.js";
 
 const PORT = process.env.PORT || 5000;
 

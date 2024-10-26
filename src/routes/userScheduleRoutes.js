@@ -1,5 +1,5 @@
 import express from "express";
-import UserScheduleController from "../controllers/userScheduleController.js";
+import UserScheduleController from "../user-schedules/userScheduleController.js";
 import userAuthorization from "../middleware/userAuthorization.js";
 
 const router = express.Router();

@@ -1,4 +1,4 @@
-import ScheduleAgreementService from "../services/scheduleAgreementService.js";
+import ScheduleAgreementService from "../../services/scheduleAgreementService.js";
 
 const ScheduleAgreementController = {
   createScheduleAgreement: async (req, res) => {

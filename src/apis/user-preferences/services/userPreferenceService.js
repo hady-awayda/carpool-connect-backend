@@ -1,4 +1,4 @@
-import userPreferenceRepository from "../repositories/userPreferenceRepository.js";
+import userPreferenceRepository from "../../../repositories/userPreferenceRepository.js";
 
 const userPreferenceService = {
   createUserPreference: async (userId, data) => {

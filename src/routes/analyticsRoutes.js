@@ -1,7 +1,7 @@
 import express from "express";
-import analyticsController from "../controllers/analyticsController.js";
-import adminAuthorization from "../middleware/adminAuthorization.js";
-import userAuthorization from "../middleware/userAuthorization.js";
+import analyticsController from "../apis/analytics/adminAnalyticsController.js";
+import adminAuthorization from "../../middleware/adminAuthorization.js";
+import userAuthorization from "../../middleware/userAuthorization.js";
 
 const router = express.Router();
 

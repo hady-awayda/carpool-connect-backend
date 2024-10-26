@@ -1,4 +1,4 @@
-import ScheduleAgreementRepository from "../repositories/scheduleAgreementRepository.js";
+import ScheduleAgreementRepository from "../../../repositories/scheduleAgreementRepository.js";
 
 const ScheduleAgreementService = {
   createScheduleAgreement: async (matchedScheduleId, proposedBy, proposedData) => {

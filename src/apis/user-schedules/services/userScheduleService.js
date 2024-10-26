@@ -1,5 +1,5 @@
-import UserScheduleRepository from "../repositories/userScheduleRepository.js";
-import SchedulePreferencesRepository from "../repositories/schedulePreferencesRepository.js";
+import UserScheduleRepository from "../../../repositories/userScheduleRepository.js";
+import SchedulePreferencesRepository from "../../../repositories/schedulePreferencesRepository.js";
 
 const handleScheduleRelations = (data) => {
   const { schedulePatternId, schedulePreferencesId, ...restData } = data;

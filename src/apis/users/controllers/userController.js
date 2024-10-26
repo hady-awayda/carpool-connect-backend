@@ -1,4 +1,4 @@
-import UserService from "../services/userService.js";
+import UserService from "../../../services/userService.js";
 
 const UserController = {
   getUsers: async (req, res) => {

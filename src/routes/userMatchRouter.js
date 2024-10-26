@@ -1,5 +1,5 @@
 import express from "express";
-import UserMatchController from "../controllers/userMatchController.js";
+import UserMatchController from "../apis/user-matches/controllers/userMatchController.js";
 import userAuthorization from "../middleware/userAuthorization.js";
 
 const router = express.Router();

@@ -2,16 +2,16 @@ import dotenv from "dotenv";
 import express from "express";
 import setupSwaggerUI from "../config/swagger.js";
 import authRoutes from "./routes/authRoutes.js";
-import conversationRoutes from "./routes/conversationRoutes.js";
+import conversationRoutes from "./apis/conversations/conversationRoutes.js";
 import matchedScheduleRoutes from "./routes/matchedScheduleRoutes.js";
 import scheduleAgreementRoutes from "./routes/scheduleAgreementRoutes.js";
 import userScheduleRoutes from "./routes/userScheduleRoutes.js";
 import schedulePatternRoutes from "./routes/schedulePatternRoutes.js";
-import userMatchRoutes from "./routes/userMatchRoutes.js";
+import userMatchRoutes from "./routes/userMatchRouter.js";
 import userPreferenceRoutes from "./routes/userPreferenceRoutes.js";
-import userRoutes from "./routes/userRoutes.js";
-import analyticsRoutes from "./routes/analyticsRoutes.js";
-import findSchedulesRoutes from "./routes/findSchedulesRoutes.js";
+import userRoutes from "./apis/users/userRoutes.js";
+import analyticsRoutes from "./apis/analytics/analyticsRoutes.js";
+import findSchedulesRoutes from "./apis/schedule-search/findSchedulesRoutes.js";
 
 dotenv.config();
 

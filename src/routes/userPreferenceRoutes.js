@@ -1,4 +1,4 @@
-import UserPreferenceController from "../controllers/userPreferenceController.js";
+import UserPreferenceController from "../apis/user-preferences/controllers/userPreferenceController.js";
 import { Router } from "express";
 import userAuthorization from "../middleware/userAuthorization.js";
 

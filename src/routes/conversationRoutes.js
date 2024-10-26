@@ -1,6 +1,6 @@
 import express from "express";
-import ConversationController from "../controllers/conversationController.js";
-import userAuthorization from "../middleware/userAuthorization.js";
+import ConversationController from "../apis/conversations/conversationController.js";
+import userAuthorization from "../../middleware/userAuthorization.js";
 
 const router = express.Router();
 
@@ -33,16 +33,19 @@ router.post(
   userAuthorization,
   ConversationController.sendMessage
 );
+
 router.get(
   "/getMessages/:conversationId",
   userAuthorization,
   ConversationController.getMessagesByConversationId
 );
+
 router.delete(
   "/deleteMessage/:messageId",
   userAuthorization,
   ConversationController.softDeleteMessage
 );
+
 router.delete(
   "/deleteConversation/:conversationId",
   userAuthorization,

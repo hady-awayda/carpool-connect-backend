@@ -16,10 +16,10 @@ const ScheduleService = {
   ) => {
     let userSchedule, scheduleTypeToSearch;
 
-    if (scheduleId) {
-      userSchedule = await getUserScheduleById(scheduleId);
-    } else {
-      userSchedule = await getDefaultUserSchedule(userId);
+    if (scheduleId > 0) {
+      userSchedule = await ScheduleRepository.getUserScheduleById(scheduleId);
+    } else if (!scheduleId) {
+      userSchedule = await ScheduleRepository.getDefaultUserSchedule(userId);
     }
 
     if (!userSchedule) {
@@ -110,14 +110,6 @@ const ScheduleService = {
     });
 
     return matchedSchedules;
-  },
-
-  getUserScheduleById: async (scheduleId) => {
-    return await UserScheduleRepository.getUserScheduleById(scheduleId);
-  },
-
-  getDefaultUserSchedule: async (userId) => {
-    return await UserScheduleRepository.getDefaultUserSchedule(userId);
   },
 };
 

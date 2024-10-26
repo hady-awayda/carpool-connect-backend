@@ -1,4 +1,4 @@
-import prisma from "../../../config/prisma_client.js";
+import prisma from "../../../../config/prisma_client.js";
 
 const ConversationRepository = {
   createConversation: async (userId1, userId2) => {

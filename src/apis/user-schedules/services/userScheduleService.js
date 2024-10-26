@@ -55,14 +55,6 @@ const UserScheduleService = {
     return userSchedules;
   },
 
-  getUserScheduleById: async (scheduleId) => {
-    return await UserScheduleRepository.getUserScheduleById(scheduleId);
-  },
-
-  getDefaultUserSchedule: async (userId) => {
-    return await UserScheduleRepository.getDefaultUserSchedule(userId);
-  },
-
   setDefaultSchedule: async (userId, scheduleId) => {
     await UserScheduleRepository.unsetDefaultSchedules(userId);
 

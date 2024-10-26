@@ -1,10 +1,9 @@
-import ScheduleRepository from "../repositories/scheduleRepository.js";
+import ScheduleRepository from "../repositories/findScheduleRepository.js";
 import {
   calculateLatLngBounds,
   calculateTimeDifference,
 } from "../../utils/geoUtils.js";
 import { getGoogleDirections } from "../../utils/googleMapsService.js";
-import userScheduleService from "./userScheduleService.js";
 
 const ScheduleService = {
   findSchedules: async (
@@ -18,9 +17,9 @@ const ScheduleService = {
     let userSchedule, scheduleTypeToSearch;
 
     if (scheduleId) {
-      userSchedule = await userScheduleService.getUserScheduleById(scheduleId);
+      userSchedule = await getUserScheduleById(scheduleId);
     } else {
-      userSchedule = await userScheduleService.getDefaultUserSchedule(userId);
+      userSchedule = await getDefaultUserSchedule(userId);
     }
 
     if (!userSchedule) {
@@ -111,6 +110,14 @@ const ScheduleService = {
     });
 
     return matchedSchedules;
+  },
+
+  getUserScheduleById: async (scheduleId) => {
+    return await UserScheduleRepository.getUserScheduleById(scheduleId);
+  },
+
+  getDefaultUserSchedule: async (userId) => {
+    return await UserScheduleRepository.getDefaultUserSchedule(userId);
   },
 };
 

@@ -20,30 +20,6 @@ const UserScheduleRepository = {
     });
   },
 
-  getUserScheduleById: async (id) => {
-    return prisma.userSchedules.findUnique({
-      where: { id, deletedAt: null },
-      include: {
-        schedulePreference: true,
-        schedulePattern: true,
-      },
-    });
-  },
-
-  getDefaultUserSchedule: async (userId) => {
-    return prisma.userSchedules.findFirst({
-      where: {
-        userId,
-        isDefault: true,
-        deletedAt: null,
-      },
-      include: {
-        schedulePreference: true,
-        schedulePattern: true,
-      },
-    });
-  },
-
   unsetDefaultSchedules: async (userId) => {
     return prisma.userSchedules.updateMany({
       where: {

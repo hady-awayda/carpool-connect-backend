@@ -1,7 +1,7 @@
 import express from "express";
 // import userAuth from "../middleware/userAuthorization.js";
 import adminAuthorization from "../../middleware/adminAuthorization.js";
-import UserController from "./controllers/userController.js";
+import UserController from "../apis/users/controllers/userController.js";
 import userAuthorization from "../../middleware/userAuthorization.js";
 // import { setUpdatedBy, setDeletedBy } from "../middleware/trackChanges.js";
 

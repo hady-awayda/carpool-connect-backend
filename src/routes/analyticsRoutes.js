@@ -1,5 +1,5 @@
 import express from "express";
-import analyticsController from "../apis/analytics/adminAnalyticsController.js";
+import analyticsController from "../apis/analytics/controllers/adminAnalyticsController.js";
 import adminAuthorization from "../../middleware/adminAuthorization.js";
 import userAuthorization from "../../middleware/userAuthorization.js";
 

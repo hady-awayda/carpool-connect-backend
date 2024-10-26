@@ -1,7 +1,11 @@
-import ScheduleAgreementRepository from "../../../repositories/scheduleAgreementRepository.js";
+import ScheduleAgreementRepository from "../repositories/scheduleAgreementRepository.js";
 
 const ScheduleAgreementService = {
-  createScheduleAgreement: async (matchedScheduleId, proposedBy, proposedData) => {
+  createScheduleAgreement: async (
+    matchedScheduleId,
+    proposedBy,
+    proposedData
+  ) => {
     const scheduleAgreementData = {
       matchedScheduleId,
       proposedBy,
@@ -9,13 +13,14 @@ const ScheduleAgreementService = {
       status: "pending",
     };
 
-    return await ScheduleAgreementRepository.createScheduleAgreement(scheduleAgreementData);
+    return await ScheduleAgreementRepository.createScheduleAgreement(
+      scheduleAgreementData
+    );
   },
 
   updateScheduleAgreement: async (id, data, userId) => {
-    const scheduleAgreement = await ScheduleAgreementRepository.getScheduleAgreementById(
-      id
-    );
+    const scheduleAgreement =
+      await ScheduleAgreementRepository.getScheduleAgreementById(id);
 
     if (!scheduleAgreement) {
       throw new Error("Schedule Agreement not found");
@@ -30,11 +35,16 @@ const ScheduleAgreementService = {
       }
 
       if ("status" in data) {
-        throw new Error("You cannot modify the status of the schedule agreement.");
+        throw new Error(
+          "You cannot modify the status of the schedule agreement."
+        );
       }
 
       // Allow modifying other fields as long as the status is pending
-      return await ScheduleAgreementRepository.updateScheduleAgreement(id, data);
+      return await ScheduleAgreementRepository.updateScheduleAgreement(
+        id,
+        data
+      );
     }
 
     // If the user is not the proposer, allow only the status update
@@ -49,9 +59,8 @@ const ScheduleAgreementService = {
 
   // Soft delete the agreement only if the user is the proposer and status is pending
   softDeleteScheduleAgreement: async (id, userId) => {
-    const scheduleAgreement = await ScheduleAgreementRepository.getScheduleAgreementById(
-      id
-    );
+    const scheduleAgreement =
+      await ScheduleAgreementRepository.getScheduleAgreementById(id);
 
     if (!scheduleAgreement) {
       throw new Error("Schedule Agreement not found");

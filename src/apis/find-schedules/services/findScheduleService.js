@@ -1,4 +1,4 @@
-import ScheduleRepository from "../../../repositories/scheduleRepository.js";
+import ScheduleRepository from "../repositories/scheduleRepository.js";
 import {
   calculateLatLngBounds,
   calculateTimeDifference,

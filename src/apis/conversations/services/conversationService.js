@@ -1,5 +1,5 @@
 import ConversationRepository from "../conversationRepository.js";
-import MessageRepository from "../../../repositories/messageRepository.js";
+import MessageRepository from "../repositories/messageRepository.js";
 
 const ConversationService = {
   createConversation: async (userId1, userId2) => {

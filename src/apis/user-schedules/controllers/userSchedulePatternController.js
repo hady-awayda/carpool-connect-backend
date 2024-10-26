@@ -1,4 +1,4 @@
-import SchedulePatternService from "../services/schedulePatternService.js";
+import SchedulePatternService from "../services/userSchedulePatternService.js";
 
 const SchedulePatternController = {
   create: async (req, res) => {

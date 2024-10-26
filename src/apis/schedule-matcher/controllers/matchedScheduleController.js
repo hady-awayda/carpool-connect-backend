@@ -1,4 +1,4 @@
-import MatchedScheduleService from "../../services/matchedScheduleService.js";
+import MatchedScheduleService from "../services/matchedScheduleService.js";
 
 const MatchedScheduleController = {
   createMatchedSchedule: async (req, res) => {

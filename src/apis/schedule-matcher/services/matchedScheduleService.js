@@ -1,4 +1,4 @@
-import MatchedScheduleRepository from "../../../repositories/matchedScheduleRepository.js";
+import MatchedScheduleRepository from "../repositories/matchedScheduleRepository.js";
 
 const MatchedScheduleService = {
   createMatchedSchedule: async (

@@ -1,4 +1,4 @@
-import UserMatchService from "../../../services/userMatchService.js";
+import UserMatchService from "../services/userMatchService.js";
 
 const UserMatchController = {
   createMatchRequest: async (req, res) => {

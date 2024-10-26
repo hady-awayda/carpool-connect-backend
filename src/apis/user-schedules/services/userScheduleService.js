@@ -1,4 +1,4 @@
-import UserScheduleRepository from "../../../repositories/userScheduleRepository.js";
+import UserScheduleRepository from "../repositories/userScheduleRepository.js";
 import SchedulePreferencesRepository from "../repositories/userSchedulePreferencesRepository.js";
 
 const handleScheduleRelations = (data) => {

@@ -17,9 +17,6 @@ const MessageRepository = {
         conversationId,
         deletedAt: null,
       },
-      include: {
-        sender: true,
-      },
     });
   },
 

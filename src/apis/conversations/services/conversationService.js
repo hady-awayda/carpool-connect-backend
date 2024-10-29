@@ -25,21 +25,33 @@ const ConversationService = {
     return await ConversationRepository.softDeleteConversation(conversationId);
   },
 
-  sendMessage: async (userId, conversationId, content) => {
-    const conversation = await ConversationRepository.findConversationById(
-      conversationId
+  sendMessage: async (userId, userId2, content) => {
+    let conversation = await ConversationRepository.findConversationByUserIds(
+      userId,
+      userId2
     );
-    if (
-      !conversation ||
-      (conversation.userId1 !== userId && conversation.userId2 !== userId)
-    ) {
-      throw new Error("User not part of this conversation.");
+
+    if (!conversation) {
+      conversation = await ConversationRepository.createConversation(
+        userId,
+        userId2
+      );
     }
-    return await MessageRepository.sendMessage(conversationId, userId, content);
+
+    return await MessageRepository.sendMessage(
+      conversation.id,
+      userId,
+      content
+    );
   },
 
-  getMessagesByConversationId: async (conversationId) => {
-    return await MessageRepository.getMessagesByConversationId(conversationId);
+  getMessagesWithUserId2: async (userId, userId2) => {
+    const conversation = await ConversationRepository.findConversationByUserIds(
+      userId,
+      userId2
+    );
+
+    return await MessageRepository.getMessagesByConversationId(conversation.id);
   },
 
   softDeleteMessage: async (messageId) => {

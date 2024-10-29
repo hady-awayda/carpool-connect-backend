@@ -45,10 +45,6 @@ const ConversationRepository = {
         OR: [{ userId1: userId }, { userId2: userId }],
         deletedAt: null,
       },
-      include: {
-        user1: true,
-        user2: true,
-      },
     });
   },
 

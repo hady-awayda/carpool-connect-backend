@@ -4,37 +4,21 @@ import userAuthorization from "../middleware/userAuthorization.js";
 
 const router = express.Router();
 
-// router.post(
-//   "/create",
-//   userAuthorization,
-//   ConversationController.createConversation
-// );
-
 router.get("/", userAuthorization, ConversationController.getUserConversations);
 
 router.get(
-  "/find/:userId2",
+  "/:userId2",
   userAuthorization,
   ConversationController.findConversationByUserIds
 );
 
 router.get(
-  "/messages/:conversationId",
+  "/messages/:userId2",
   userAuthorization,
-  ConversationController.getMessagesByConversationId
+  ConversationController.getMessagesWithUserId2
 );
 
-// router.get(
-//   "/getConversations/:conversationId",
-//   userAuthorization,
-//   ConversationController.getConversationById
-// );
-
-router.post(
-  "/message/:conversationId",
-  userAuthorization,
-  ConversationController.sendMessage
-);
+router.post("/:userId2", userAuthorization, ConversationController.sendMessage);
 
 router.delete(
   "/message/:messageId",
@@ -43,9 +27,21 @@ router.delete(
 );
 
 router.delete(
-  "/conversation/:conversationId",
+  "/conversation/:userId2",
   userAuthorization,
   ConversationController.softDeleteConversation
 );
+
+// router.post(
+//   "/create",
+//   userAuthorization,
+//   ConversationController.createConversation
+// );
+
+// router.get(
+//   "/getConversations/:conversationId",
+//   userAuthorization,
+//   ConversationController.getConversationById
+// );
 
 export default router;

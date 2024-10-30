@@ -26,8 +26,6 @@ const ConversationService = {
       userId2
     );
 
-    console.log(conversation);
-
     if (!conversation) {
       conversation = await ConversationRepository.createConversation(
         userId,
@@ -48,6 +46,10 @@ const ConversationService = {
       userId2
     );
 
+    if (!conversation) {
+      throw new Error("Conversation not found");
+    }
+
     return await ConversationRepository.getMessagesByConversationId(
       conversation.id
     );
@@ -58,6 +60,10 @@ const ConversationService = {
       await ConversationRepository.findConversationsByIdEvenIfDeleted(
         conversationId
       );
+
+    if (conversation === null) {
+      throw new Error("Conversation not found");
+    }
 
     if (conversation.userId1 !== userId && conversation.userId2 !== userId) {
       throw new Error("Unauthorized");
@@ -72,6 +78,10 @@ const ConversationService = {
 
   softDeleteMessage: async (messageId, userId) => {
     const message = await ConversationRepository.findMessageById(messageId);
+
+    if (message === null) {
+      throw new Error("Message not found");
+    }
 
     const conversation = await ConversationRepository.findConversationById(
       message.conversationId

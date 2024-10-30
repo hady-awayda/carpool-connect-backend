@@ -1,12 +1,11 @@
 import ConversationRepository from "../repositories/conversationRepository.js";
-import MessageRepository from "../repositories/messageRepository.js";
 
 const ConversationService = {
   createConversation: async (userId1, userId2) => {
     return await ConversationRepository.createConversation(userId1, userId2);
   },
 
-  findConversationByUserIds: async (userId1, userId2) => {
+  findConversationWithUserId2: async (userId1, userId2) => {
     return await ConversationRepository.findConversationByUserIds(
       userId1,
       userId2
@@ -21,15 +20,13 @@ const ConversationService = {
     return await ConversationRepository.findConversationById(conversationId);
   },
 
-  softDeleteConversation: async (conversationId) => {
-    return await ConversationRepository.softDeleteConversation(conversationId);
-  },
-
   sendMessage: async (userId, userId2, content) => {
     let conversation = await ConversationRepository.findConversationByUserIds(
       userId,
       userId2
     );
+
+    console.log(conversation);
 
     if (!conversation) {
       conversation = await ConversationRepository.createConversation(
@@ -38,7 +35,7 @@ const ConversationService = {
       );
     }
 
-    return await MessageRepository.sendMessage(
+    return await ConversationRepository.sendMessage(
       conversation.id,
       userId,
       content
@@ -51,11 +48,52 @@ const ConversationService = {
       userId2
     );
 
-    return await MessageRepository.getMessagesByConversationId(conversation.id);
+    return await ConversationRepository.getMessagesByConversationId(
+      conversation.id
+    );
   },
 
-  softDeleteMessage: async (messageId) => {
-    return await MessageRepository.softDeleteMessage(messageId);
+  softDeleteConversation: async (conversationId, userId) => {
+    const conversation =
+      await ConversationRepository.findConversationsByIdEvenIfDeleted(
+        conversationId
+      );
+
+    if (conversation.userId1 !== userId && conversation.userId2 !== userId) {
+      throw new Error("Unauthorized");
+    }
+
+    if (conversation.deletedAt !== null) {
+      throw new Error("Conversation already deleted");
+    }
+
+    return await ConversationRepository.softDeleteConversation(conversationId);
+  },
+
+  softDeleteMessage: async (messageId, userId) => {
+    const message = await ConversationRepository.findMessageById(messageId);
+
+    const conversation = await ConversationRepository.findConversationById(
+      message.conversationId
+    );
+
+    if (conversation === null) {
+      throw new Error("Conversation not found");
+    }
+
+    if (conversation.userId1 !== userId && conversation.userId2 !== userId) {
+      throw new Error("Unauthorized");
+    }
+
+    if (conversation.deletedAt !== null) {
+      throw new Error("Conversation already deleted");
+    }
+
+    if (message.deletedAt !== null) {
+      throw new Error("Message already deleted");
+    }
+
+    return await ConversationRepository.softDeleteMessage(messageId);
   },
 };
 

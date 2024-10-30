@@ -296,8 +296,6 @@ model Conversation {
   user1    User      @relation("ConversationUser1", fields: [userId1], references: [id])
   user2    User      @relation("ConversationUser2", fields: [userId2], references: [id])
   messages Message[]
-
-  @@unique([userId1, userId2], name: "unique_conversation")
 }
 
 model Message {

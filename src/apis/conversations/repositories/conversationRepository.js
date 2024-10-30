@@ -5,12 +5,11 @@ const ConversationRepository = {
     const [firstUserId, secondUserId] =
       userId1 < userId2 ? [userId1, userId2] : [userId2, userId1];
 
-    const existingConversation = await prisma.conversation.findUnique({
+    const existingConversation = await prisma.conversation.findFirst({
       where: {
-        unique_conversation: {
-          userId1: firstUserId,
-          userId2: secondUserId,
-        },
+        userId1: firstUserId,
+        userId2: secondUserId,
+        deletedAt: null,
       },
     });
 
@@ -51,10 +50,12 @@ const ConversationRepository = {
   findConversationById: async (conversationId) => {
     return await prisma.conversation.findFirst({
       where: { id: conversationId, deletedAt: null },
-      include: {
-        user1: true,
-        user2: true,
-      },
+    });
+  },
+
+  findConversationsByIdEvenIfDeleted: async (conversationId) => {
+    return await prisma.conversation.findFirst({
+      where: { id: conversationId },
     });
   },
 
@@ -62,6 +63,40 @@ const ConversationRepository = {
     return await prisma.conversation.update({
       where: { id: conversationId },
       data: { deletedAt: new Date() },
+    });
+  },
+
+  sendMessage: async (conversationId, senderId, content) => {
+    return await prisma.message.create({
+      data: {
+        conversationId,
+        senderId,
+        content,
+      },
+    });
+  },
+
+  getMessagesByConversationId: async (conversationId) => {
+    return await prisma.message.findMany({
+      where: {
+        conversationId,
+        deletedAt: null,
+      },
+    });
+  },
+
+  findMessageById: async (messageId) => {
+    return await prisma.message.findFirst({
+      where: { id: messageId },
+    });
+  },
+
+  softDeleteMessage: async (messageId) => {
+    return await prisma.message.update({
+      where: { id: messageId },
+      data: {
+        deletedAt: new Date(),
+      },
     });
   },
 };

@@ -9,7 +9,7 @@ router.get("/", userAuthorization, ConversationController.getUserConversations);
 router.get(
   "/:userId2",
   userAuthorization,
-  ConversationController.findConversationByUserIds
+  ConversationController.findConversationWithUserId2
 );
 
 router.get(
@@ -21,15 +21,15 @@ router.get(
 router.post("/:userId2", userAuthorization, ConversationController.sendMessage);
 
 router.delete(
-  "/message/:messageId",
+  "/conversation/:conversationId",
   userAuthorization,
-  ConversationController.softDeleteMessage
+  ConversationController.softDeleteConversation
 );
 
 router.delete(
-  "/conversation/:userId2",
+  "/message/:messageId",
   userAuthorization,
-  ConversationController.softDeleteConversation
+  ConversationController.softDeleteMessage
 );
 
 // router.post(

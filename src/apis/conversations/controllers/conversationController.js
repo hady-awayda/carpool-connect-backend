@@ -14,15 +14,16 @@ const ConversationController = {
     }
   },
 
-  findConversationByUserIds: async (req, res) => {
+  findConversationWithUserId2: async (req, res) => {
     const userId1 = req.user.id;
     const { userId2 } = req.params;
 
     try {
-      const conversation = await ConversationService.findConversationByUserIds(
-        userId1,
-        parseInt(userId2)
-      );
+      const conversation =
+        await ConversationService.findConversationWithUserId2(
+          userId1,
+          parseInt(userId2)
+        );
 
       if (!conversation) {
         return res.status(404).json({ message: "Conversation not found" });
@@ -78,21 +79,15 @@ const ConversationController = {
     }
   },
 
-  softDeleteMessage: async (req, res) => {
-    const { messageId } = req.params;
-    try {
-      await ConversationService.softDeleteMessage(messageId);
-
-      res.status(200).json({ message: "Message soft-deleted" });
-    } catch (error) {
-      res.status(500).json({ message: error.message });
-    }
-  },
-
   softDeleteConversation: async (req, res) => {
     const { conversationId } = req.params;
+    const userId = req.user.id;
+
     try {
-      await ConversationService.softDeleteConversation(conversationId);
+      await ConversationService.softDeleteConversation(
+        parseInt(conversationId),
+        userId
+      );
 
       res.status(200).json({ message: "Conversation soft-deleted" });
     } catch (error) {
@@ -100,34 +95,14 @@ const ConversationController = {
     }
   },
 
-  createConversation: async (req, res) => {
-    const userId1 = req.user.id;
-    const { userId2 } = req.body;
+  softDeleteMessage: async (req, res) => {
+    const { messageId } = req.params;
+    const userId = req.user.id;
 
     try {
-      const conversation = await ConversationService.createConversation(
-        userId1,
-        userId2
-      );
+      await ConversationService.softDeleteMessage(parseInt(messageId), userId);
 
-      res.status(201).json(conversation);
-    } catch (error) {
-      res.status(500).json({ message: error.message });
-    }
-  },
-
-  getConversationById: async (req, res) => {
-    const { conversationId } = req.params;
-    try {
-      const conversation = await ConversationService.findConversationById(
-        conversationId
-      );
-
-      if (!conversation) {
-        return res.status(404).json({ message: "Conversation not found" });
-      }
-
-      res.status(200).json(conversation);
+      res.status(200).json({ message: "Message soft-deleted" });
     } catch (error) {
       res.status(500).json({ message: error.message });
     }
